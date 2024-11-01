@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+p {
+    font-size: 18px;
+}
+
+input,
+button {
+    font-size: 18px;
+    font-family: "Manrope";
+    font-weight: 300;
+}
+button {
+    cursor: pointer;
+    color: white;
+}
+input::placeholder {
+    color: #2f2f2f;
+}
+
+label {
+    font-size: 18px;
+    font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: inherit;
+    font-weight: inherit;
+}
+
+html,
+body {
+    height: 100%;
+    width: 100%;
+    font-size: 100%;
+    line-height: 1;
+    font-family: "Manrope";
+    background: #232E3C;
+}
+
+.__container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.block_title {
+    margin: 0 auto;
+    width: 650px;
+    margin-bottom: 100px;
+}
+
+.title {
+    font-size: 38px;
+    font-weight: 300;
+}
+
+.title_center {
+    text-align: center;
+}
+
+/* Calendar */
+
+.wrapper_calendar {
+    max-width: 600px;
+}
+
+.section_white {
+    padding-top: 20px;
+    padding-bottom: 70px;
+}
+
+.calendar_block {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#calendar {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 4px;
+    text-align: center;
+    user-select: none;
+}
+#calendar thead tr:last-child {
+    font-size: small;
+    color: #7D7D7D;
+}
+#calendar thead tr:nth-child(1) td:nth-child(2) {
+    color: #ffffff;
+}
+#calendar thead tr:nth-child(1) td:nth-child(1):hover,
+#calendar thead tr:nth-child(1) td:nth-child(3):hover {
+    cursor: pointer;
+}
+#calendar tbody td {
+    color: rgb(255, 255, 255);
+}
+#calendar tbody td.today {
+    text-decoration: underline;
+}
+
+#calendar .body_calendar {
+    border-spacing: 30px;
+}
+#calendar .body_calendar tr td {
+    height: 30px;
+    width: 40px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.arrow {
+    font-size: 30px;
+    color: white;
+}
+
+.title_calendar {
+    font-size: 22px;
+    color: #2f2f2f;
+}
+
+.row_title_calendar {
+    height: 50px;
+    vertical-align: top;
+}
+
+/* blocks_row */
+
+.flex {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.center {
+    align-items: center;
+    justify-content: center;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.column {
+    flex-direction: column;
+}
+
+.block_time {
+    gap: 20px;
+    justify-content: center;
+}
+
+.title_block_time {
+    margin-bottom: 10px;
+    color: white;
+    font-weight: 500;
+}
+
+.block_time_btns {
+    gap: 10px;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+.btn_time {
+    border-radius: 5px;
+    border: 1px solid #1D7BF6;
+    padding: 5px;
+    min-width: 70px;
+    background: none;
+    font-size: 14px;
+}
+
+.block_zapis {
+    gap: 10px;
+}
+
+.btn_zapis {
+    width: 100%;
+    min-height: 18px;
+    padding: 6px 0;
+    background: none;
+    border-radius: 10px;
+    border: 1px solid #1D7BF6;
+}
+
+.btn_zapis_active {
+    background-color: #1D7BF6;
+
+}
+/* ---- */
+.gap_15 {
+    gap: 15px;
+}
+
+.container_cards {
+    gap: 15px;
+    width: 100%;
+}
+
+.block_card {
+    border-radius: 20px;
+    background: #17212B;
+    min-height: 50px;
+    padding: 25px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.block_card__blue {
+    background: #1D7BF6;
+    line-height: 1.3;
+    justify-content: space-between;
+}
+
+.arrow_card {
+    background: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    color: #1D7BF6;
+    font-size: 30px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+/* ---- */
+
+.row_deys_calendar td {
+    height: 30px;
+}
+
+.container_calendar {
+    padding: 25px;
+    border-radius: 20px;
+    background: #17212B;
+    gap: 35px;
+
+}
+
+/* img */
+.img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+}
+
+/* РАдио */
+.form_radio_btn {
+    display: block;
+    width: 50%;
+}
+.form_radio_btn input[type="radio"] {
+    display: none;
+}
+
