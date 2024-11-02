@@ -1,7 +1,6 @@
 <template>
     <section class="section_white">
         <div class="__container wrapper_calendar flex gap_15">
-
             <!--Блоки Цена/Отзывы/Мои записи-->
             <div class="flex row gap_15">
                 <div class="flex blocks container_cards">
@@ -24,6 +23,7 @@
                           @dateSelected="handleDateSelection"
                 ></Calendar>
 
+                <transition name="expand" mode="out-in">
                 <div v-if="!selectedDate" class="flex column block_time">
                     <h4 class="title_block_time">Выберите дату</h4>
                 </div>
@@ -51,6 +51,7 @@
 
                     </div>
                 </div>
+                </transition>
 
                 <!--                <div class="flex row block_zapis">-->
                 <!--                    <button class="btn_zapis btn_zapis_active">Прием</button>-->
@@ -88,14 +89,24 @@ export default {
         tg.MainButton.onClick(() => {
             this.handleMainButtonClick();
         });
+
+        this.initializeCache();
     },
 
     methods: {
 
+        async initializeCache() {
+            try {
+                await axios.post('api/initialize-cache');
+                console.log('Cache initialized successfully');
+            } catch (error) {
+                console.error('Error initializing cache:', error);
+            }
+        },
+
         handleTimeData(response) {
             this.availableSlots.consultation = response.consultation || {};
             this.availableSlots.reception = response.reception || {};
-            console.log(this.selectedTimes)
         },
         handleDateSelection(date) {
             this.selectedDate = date;
@@ -119,6 +130,17 @@ export default {
 </script>
 
 <style>
+.fade-slide-enter-active, .fade-slide-leave-active {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.fade-slide-enter, .fade-slide-leave-to {
+    opacity: 0;
+    transform: translateY(10px);
+}
+.block_time.expanded {
+    max-height: 500px; /* Установите нужную максимальную высоту */
+}
+
 .title_close {
     margin-bottom: 0;
     color: #555;

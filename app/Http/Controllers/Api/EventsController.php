@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Spatie\GoogleCalendar\Event;
 
 class EventsController extends Controller
@@ -12,25 +13,25 @@ class EventsController extends Controller
     public function getEvents(Request $request)
     {
         $selectedDate = $request->input("date");
-        $events = Event::get();
+        $events = $this->getEventsForDate($selectedDate);
 
-        $selectedCarbonDate = Carbon::parse($selectedDate)->format('Y-m-d');
-
-        $availableSlots = $this->getAvailableTimeSlots($events, $selectedCarbonDate);
+        $availableSlots = $this->getAvailableTimeSlots(collect($events), $selectedDate);
 
         if (empty($availableSlots)) {
             return response()->json(['message' => 'No upcoming events found.'], 404);
         }
 
-//        $formattedEvents = $filteredEvents->map(function ($event) {
-//            return [
-//                'id' => $event->id,
-//                'summary' => $event->summary,
-//                'start' => Carbon::parse($event->startDateTime)->format('Y-m-d H:i:s'),
-//                'end' => Carbon::parse($event->endDateTime)->format('Y-m-d H:i:s'),
-//            ];
-//        });
         return response()->json($availableSlots);
+    }
+
+    private function getEventsForDate($date)
+    {
+        $events = Cache::get("calendar_events_{$date}");
+
+        if (is_null($events)) {
+            return [];
+        }
+        return $events;
     }
 
     private function getAvailableTimeSlots($events, $selectedDate)
@@ -84,7 +85,6 @@ class EventsController extends Controller
             'consultation' => $consultationSlots,
             'reception' => $receptionSlots,
         ];
-
     }
 
     private function timeOverlaps($start1, $end1, $start2, $end2)

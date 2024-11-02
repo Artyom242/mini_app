@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CalendarServiceController;
 use App\Http\Controllers\Api\EventsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,4 +21,6 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::post('/get-events', [EventsController::class, 'getEvents']);
+
+Route::post('/initialize-cache', [CalendarServiceController::class, 'initializeCache']);
 
