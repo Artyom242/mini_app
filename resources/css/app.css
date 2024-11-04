@@ -11,8 +11,8 @@ p {
 
 input,
 button {
-    font-size: 18px;
-    font-family: "Manrope";
+    font-size: 16px;
+    font-family: "Manrope", serif;
     font-weight: 300;
 }
 button {
@@ -20,11 +20,11 @@ button {
     color: white;
 }
 input::placeholder {
-    color: #2f2f2f;
+    color: #919191;
 }
 
 label {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 300;
 }
 
@@ -44,7 +44,7 @@ body {
     width: 100%;
     font-size: 100%;
     line-height: 1;
-    font-family: "Manrope";
+    font-family: "Manrope", serif;
     background: #232E3C;
 }
 
@@ -61,12 +61,13 @@ body {
 }
 
 .title {
-    font-size: 38px;
-    font-weight: 300;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .title_center {
     text-align: center;
+    margin-bottom: 10px;
 }
 
 /* Calendar */
@@ -269,4 +270,9 @@ a {
 .form_radio_btn input[type="radio"] {
     display: none;
 }
+
+.modal_form {
+    width: 100%;
+}
+
 

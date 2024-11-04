@@ -36,8 +36,8 @@
 <script>
 import {ref, computed} from 'vue';
 import axios from "axios";
-import {formatDate} from "../convert-data.js"
-import {getAvailableTimeSlots} from "../getEventsCalendar.js"
+import {formatDate} from "../../convert-data.js"
+import {getAvailableTimeSlots} from "../../getEventsCalendar.js"
 
 export default {
     name: 'Calendar',

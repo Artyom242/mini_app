@@ -20,10 +20,6 @@ Route::get('/', function () {
     return view('app');
 })->name('application');
 
-Route::get('/dd', function () {
-
-});
-
 
 Route::get('/create', function () {
     $event = new Event;
