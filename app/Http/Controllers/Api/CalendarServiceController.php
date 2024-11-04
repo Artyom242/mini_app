@@ -13,7 +13,6 @@ class CalendarServiceController extends Controller
     public function initializeCache()
     {
         $events = Event::get();
-
         $eventsByDate = [];
 
         foreach ($events as $event) {
@@ -22,13 +21,13 @@ class CalendarServiceController extends Controller
             if (!isset($eventsByDate[$date])) {
                 $eventsByDate[$date] = [];
             }
-            $eventsByDate[$date][] = $event;
+            $eventsByDate[$date][] = [
+                'startDateTime' => $event->startDateTime->format('H:i'),
+                'endDateTime' => $event->endDateTime->format('H:i'),
+            ];
         }
 
-        // Сохраняем массив событий для каждой даты
-        foreach ($eventsByDate as $date => $events) {
-            Cache::put("calendar_events_{$date}", $events, now()->addDay());
-        }
+        return response()->json($eventsByDate);
     }
 
     public function getEventsForDate($date)

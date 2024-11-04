@@ -52,11 +52,6 @@
                     </div>
                 </div>
                 </transition>
-
-                <!--                <div class="flex row block_zapis">-->
-                <!--                    <button class="btn_zapis btn_zapis_active">Прием</button>-->
-                <!--                    <button class="btn_zapis">Консультация</button>-->
-                <!--                </div>-->
             </div>
         </div>
     </section>
@@ -84,20 +79,21 @@ export default {
         let tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-        tg.MainButton.show();
-        tg.MainButton.text = "Записаться";
-        tg.MainButton.onClick(() => {
-            this.handleMainButtonClick();
-        });
 
         this.initializeCache();
+        this.updateMainButton();
     },
-
+    watch: {
+        selectedTimes(newTimes) {
+            this.updateMainButton();
+        }
+    },
     methods: {
-
         async initializeCache() {
             try {
-                await axios.post('api/initialize-cache');
+                let response = await axios.post('api/initialize-cache');
+                const eventsByDate = response.data;
+                localStorage.setItem('eventsByDate', JSON.stringify(eventsByDate));
                 console.log('Cache initialized successfully');
             } catch (error) {
                 console.error('Error initializing cache:', error);
@@ -107,23 +103,38 @@ export default {
         handleTimeData(response) {
             this.availableSlots.consultation = response.consultation || {};
             this.availableSlots.reception = response.reception || {};
+
+            this.selectedTimes = this.selectedTimes.filter(time =>
+                this.availableSlots.consultation[time] || this.availableSlots.reception[time]
+            );
+
+            this.updateMainButton();
         },
         handleDateSelection(date) {
             this.selectedDate = date;
-            this.filterUnavailableTimes();
         },
         toggleTime(time) {
             const index = this.selectedTimes.indexOf(time);
             if (index > -1) {
-                this.selectedTimes.splice(index, 1);
+                this.selectedTimes = [
+                    ...this.selectedTimes.slice(0, index),
+                    ...this.selectedTimes.slice(index + 1)
+                ];
             } else {
-                this.selectedTimes.push(time);
+                this.selectedTimes = [...this.selectedTimes, time];
             }
         },
-        filterUnavailableTimes() {
-            this.selectedTimes = this.selectedTimes.filter(time =>
-                this.availableSlots.consultation[time] || this.availableSlots.reception[time]
-            );
+        updateMainButton(){
+            let tg = window.Telegram.WebApp;
+            if (this.selectedTimes.length > 0) {
+                tg.MainButton.show();
+                tg.MainButton.text = "Продолжить";
+                tg.MainButton.onClick(() => {
+                    this.handleMainButtonClick();
+                });
+            } else {
+                tg.MainButton.hide();
+            }
         },
     },
 };

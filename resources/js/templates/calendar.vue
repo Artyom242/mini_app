@@ -37,6 +37,7 @@
 import {ref, computed} from 'vue';
 import axios from "axios";
 import {formatDate} from "../convert-data.js"
+import {getAvailableTimeSlots} from "../getEventsCalendar.js"
 
 export default {
     name: 'Calendar',
@@ -107,17 +108,14 @@ export default {
                     selectedDate.value.year === year.value) {
                     selectedDate.value = null;
                     emit('dateSelected', selectedDate.value);
+                    emit('timeData', []);
                 } else {
                     selectedDate.value = {day, month: month.value + 1, year: year.value};
+                    const formattedDate = formatDate(selectedDate.value);
+
+                    let events = getAvailableTimeSlots(formattedDate);
                     emit('dateSelected', selectedDate.value);
-                    try {
-                        const formattedDate = formatDate(selectedDate.value);
-                        const response = await axios.post('/api/get-events', {date: formattedDate});
-                        emit('timeData', response.data);
-                        console.log(response.data)
-                    } catch (error) {
-                        console.error('Ошибка при отправке выбранной даты:', error);
-                    }
+                    emit('timeData', events);
                 }
             }
         };
@@ -140,6 +138,7 @@ export default {
             isWeekend,
             isSelected,
             isPastDate,
+
         };
     },
 };
