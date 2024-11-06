@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\Api\CalendarServiceController;
+use App\Http\Controllers\Api\CheckEventsController;
 use App\Http\Controllers\Api\EventsController;
+use App\Http\Controllers\Api\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 //});
 
 Route::post('/get-events', [EventsController::class, 'getEvents']);
+Route::post('/check-events', [CheckEventsController::class, 'checkEvents']);
+Route::post('/message', [MessageController::class, 'send']);
 
 Route::post('/initialize-cache', [CalendarServiceController::class, 'initializeCache']);
 

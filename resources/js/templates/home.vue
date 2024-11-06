@@ -57,26 +57,31 @@
                 <h5 class="title modal_form-title">Осталось совсем немного</h5>
                 <div class="modal_form flex column">
                     <div class="flex column modal_form_pole">
-                        <label ref="nameLabel" class="modal_form_label" :class="{ 'active': !name && !isNameFocused }"  for="name">Имя</label>
-                        <input class="input" type="text" v-model="name" @focus="onFocus('name')" @blur="onBlur('name')" />
+                        <label ref="nameLabel" class="modal_form_label" :class="{ 'active': !name && !isNameFocused }"
+                               for="name">Имя</label>
+                        <input class="input" type="text" v-model="name"
+                               @input="updateMainButton"
+                               @focus="onFocus('name')"
+                               @blur="onBlur('name')"/>
                     </div>
                     <div class="flex column modal_form_pole">
-                        <label ref="phoneLabel" class="modal_form_label" :class="{ 'active': !phone && !isPhoneFocused }"  for="phone">Телефон</label>
+                        <label ref="phoneLabel" class="modal_form_label"
+                               :class="{ 'active': !phone && !isPhoneFocused }" for="phone">Телефон</label>
                         <MaskInput class="input" mask="+7 (###) ### ##-##" type="tel" v-model="phone"
-                                  @focus="onFocus('phone')"
-                                  @blur="onBlur('phone')"></MaskInput>
-<!--                        <input class="input" type="text" v-model="phone"-->
-<!--                               @focus="onFocus('phone')"-->
-<!--                               @blur="onBlur('phone')" />-->
+                                    @input="updateMainButton"
+                                   @focus="onFocus('phone')"
+                                   @blur="onBlur('phone')"></MaskInput>
                     </div>
                 </div>
             </div>
         </div>
     </transition>
 </template>
-<script >
+<script>
 import Calendar from './components/calendar.vue';
-import { MaskInput } from 'vue-3-mask';
+import {formatDate} from "../convert-data.js"
+import {MaskInput} from 'vue-3-mask';
+
 export default {
     name: 'Home',
     components: {
@@ -97,6 +102,7 @@ export default {
             phone: '',
             isNameFocused: false,
             isPhoneFocused: false,
+            isFirstHandlerActive: true,
         };
     },
     mounted() {
@@ -109,6 +115,12 @@ export default {
     },
     watch: {
         selectedTimes(newTimes) {
+            this.updateMainButton();
+        },
+        name() {
+            this.updateMainButton();
+        },
+        phone() {
             this.updateMainButton();
         }
     },
@@ -123,6 +135,34 @@ export default {
                 console.error('Error initializing cache:', error);
             }
         },
+        async checkEvents() {
+            let tg = window.Telegram.WebApp;
+            tg.MainButton.showProgress();
+
+            try {
+                let response = await axios.post('api/check-events', { date: formatDate(this.selectedDate), times: this.selectedTimes });
+                const eventsByDate = response.data;
+                tg.MainButton.hideProgress();
+
+                if (eventsByDate.occupiedTimes.length === 0) {
+                    this.closeModal();
+                    tg.close();
+
+                } else {
+                    let times = eventsByDate.occupiedTimes.join(', ');
+                    let formattedDate = new Date(eventsByDate.date).toLocaleDateString('ru-RU');
+
+                    tg.MainButton.hideProgress();
+                    this.closeModal();
+                    tg.showAlert(`К сожалению, на ${formattedDate} в выбранное время (${times}) уже есть запись. Пожалуйста, выберите другое время.`);
+                }
+            } catch (error) {
+                tg.MainButton.hideProgress();
+                this.closeModal();
+                tg.showAlert("Произошла ошибка. Попробуйте позже.");
+            }
+        },
+
 
         handleTimeData(response) {
             this.availableSlots.consultation = response.consultation || {};
@@ -148,42 +188,73 @@ export default {
                 this.selectedTimes = [...this.selectedTimes, time];
             }
         },
-        updateMainButton() {
-            let tg = window.Telegram.WebApp;
-            if (this.selectedTimes.length > 0) {
-                tg.MainButton.show();
-                tg.MainButton.text = "Продолжить";
-                tg.MainButton.onClick(() => {
-                    this.openModal();
-                });
-            } else {
-                tg.MainButton.hide();
-            }
+
+        handleFirstButtonClick() {
+            this.openModal();
+            this.isFirstHandlerActive = false; // Переключаем обработчик
+            this.updateMainButton();
+        },
+        handleSecondButtonClick() {
+            this.checkEvents();
+            this.updateMainButton();
         },
         openModal() {
             this.isModalOpen = true;
             let tg = window.Telegram.WebApp;
-            tg.MainButton.text = "Записаться";
+            tg.MainButton.show();
+            tg.MainButton.setText("Записаться");
+        },
+        updateMainButton() {
+            let tg = window.Telegram.WebApp;
+
+            tg.MainButton.offClick(this.handleFirstButtonClick);
+            tg.MainButton.offClick(this.handleSecondButtonClick);
+
+            if (this.isFirstHandlerActive) {
+                tg.MainButton.offClick(this.handleSecondButtonClick);
+                tg.MainButton.onClick(this.handleFirstButtonClick); // Включаем первый обработчик
+                tg.MainButton.setText("Продолжить");
+                tg.MainButton.enable();
+            } else {
+                tg.MainButton.offClick(this.handleFirstButtonClick);
+                tg.MainButton.onClick(this.handleSecondButtonClick); // Включаем второй обработчик
+                tg.MainButton.setText("Записаться");
+
+                const isFormValid = this.name.trim() !== '' && this.phone.trim().length >= 18;
+                if (isFormValid) {
+                    tg.MainButton.enable();
+                } else {
+                    tg.MainButton.disable();
+                }
+            }
+
+            // Проверяем, нужно ли показывать кнопку
+            if (this.selectedTimes.length > 0) {
+                tg.MainButton.show();
+            } else {
+                tg.MainButton.hide();
+            }
         },
         closeModal() {
             this.isModalOpen = false;
-            let tg = window.Telegram.WebApp;
-            tg.MainButton.text = "Продолжить";
+            this.isFirstHandlerActive = true;
+            this.updateMainButton();
+            this.phone = '';
         },
         onFocus(field) {
             if (field === 'name') {
-                this.isNameFocused = true;  // Установите флаг фокуса
+                this.isNameFocused = true;
             } else if (field === 'phone') {
-                this.isPhoneFocused = true;  // Установите флаг фокуса
+                this.isPhoneFocused = true;
             }
         },
         onBlur(field) {
             if (field === 'name') {
-                this.isNameFocused = false;  // Сбросьте флаг фокуса
+                this.isNameFocused = false;
             } else if (field === 'phone') {
-                this.isPhoneFocused = false;  // Сбросьте флаг фокуса
+                this.isPhoneFocused = false;
             }
-        }
+        },
     },
 };
 </script>
