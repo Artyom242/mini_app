@@ -145,6 +145,14 @@ export default {
                 tg.MainButton.hideProgress();
 
                 if (eventsByDate.occupiedTimes.length === 0) {
+                    await axios.post('/api/message', {
+                        chat_id: tg.initDataUnsafe.user.id,
+                        date: formatDate(this.selectedDate),
+                        times: this.selectedTimes,
+                        name: this.name,
+                        phone: this.phone,
+                    });
+
                     this.closeModal();
                     tg.close();
 
@@ -206,7 +214,6 @@ export default {
         },
         updateMainButton() {
             let tg = window.Telegram.WebApp;
-
             tg.MainButton.offClick(this.handleFirstButtonClick);
             tg.MainButton.offClick(this.handleSecondButtonClick);
 
