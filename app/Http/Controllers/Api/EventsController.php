@@ -5,91 +5,50 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Spatie\GoogleCalendar\Event;
 
 class EventsController extends Controller
 {
     public function getEvents(Request $request)
     {
-        $selectedDate = $request->input("date");
-        $events = $this->getEventsForDate($selectedDate);
+        $userId = $request->input("id_user");
+        $startDateTime = Carbon::now()->subYears();
+        $endDateTime = Carbon::now()->addYears();
 
-        $availableSlots = $this->getAvailableTimeSlots(collect($events), $selectedDate);
+        $events = Event::get(
+            $startDateTime, $endDateTime,
+        );
 
-        if (empty($availableSlots)) {
-            return response()->json(['message' => 'No upcoming events found.'], 404);
-        }
-
-        return response()->json($availableSlots);
-    }
-
-    private function getEventsForDate($date)
-    {
-        $events = Cache::get("calendar_events_{$date}");
-
-        if (is_null($events)) {
-            return [];
-        }
-        return $events;
-    }
-
-    private function getAvailableTimeSlots($events, $selectedDate)
-    {
-        $consultationSlots = [
-            '08:45' => true,
-        ];
-
-        $receptionSlots = [
-            '09:00' => true,
-            '10:00' => true,
-            '11:00' => true,
-            '12:00' => true,
-            '13:00' => true,
-            '14:00' => true,
-            '15:00' => true,
-            '16:00' => true,
-        ];
-
-        $occupiedSlots = $events->filter(function ($event) use ($selectedDate) {
-            return Carbon::parse($event->startDateTime)->format('Y-m-d') === $selectedDate;
-        })->map(function ($event) {
-            return [
-                'start' => Carbon::parse($event->startDateTime)->format('H:i'),
-                'end' => Carbon::parse($event->endDateTime)->format('H:i'),
-            ];
+        $filteredEvents = $events->filter(function ($event) use ($userId) {
+            return strpos($event->description, "Id: {$userId}") !== false;
         });
 
-        // Проверка занятости консультационных слотов
-        foreach ($occupiedSlots as $occupied) {
-            foreach ($consultationSlots as $slot => $isAvailable) {
-                if ($this->timeOverlaps($slot, Carbon::createFromFormat('H:i', $slot)->addMinutes(15)->format('H:i'), $occupied['start'], $occupied['end'])) {
-                    $consultationSlots[$slot] = false; // Устанавливаем занятость
-                }
-            }
+        if ($filteredEvents->isEmpty()) {
+            return response()->json(['message' => 'No events found for this user ID'], 404);
         }
 
-        // Проверка занятости слотов приема
-        foreach ($occupiedSlots as $occupied) {
-            foreach ($receptionSlots as $time => $isAvailable) {
-                $slotStart = $time;
-                $slotEnd = Carbon::createFromFormat('H:i', $slotStart)->addMinutes(60)->format('H:i'); // Прием длится 1 час
+        $now = Carbon::now();
 
-                if ($this->timeOverlaps($slotStart, $slotEnd, $occupied['start'], $occupied['end'])) {
-                    $receptionSlots[$time] = false; // Устанавливаем занятость
-                }
-            }
-        }
+        $pastEvents = $filteredEvents->filter(fn($event) => $event->startDateTime < $now);
+        $upcomingEvents = $filteredEvents->filter(fn($event) => $event->startDateTime >= $now);
 
-        return [
-            'consultation' => $consultationSlots,
-            'reception' => $receptionSlots,
+        $result = [
+            'past_events' => $pastEvents->map(fn($event) => [
+                'id' => $event->id,
+                'title' => $event->name,
+                'description' => $event->description,
+                'start' => $event->startDateTime->format('Y-m-d H:i'),
+                'end' => $event->endDateTime->format('Y-m-d H:i'),
+            ]),
+            'upcoming_events' => $upcomingEvents->map(fn($event) => [
+                'id' => $event->id,
+                'title' => $event->name,
+                'description' => $event->description,
+                'start' => $event->startDateTime->format('Y-m-d H:i'),
+                'end' => $event->endDateTime->format('Y-m-d H:i'),
+            ])
         ];
-    }
-
-    private function timeOverlaps($start1, $end1, $start2, $end2)
-    {
-        return ($start1 < $end2 && $start2 < $end1);
+        return response()->json($result);
     }
 }
 

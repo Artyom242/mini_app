@@ -2,9 +2,9 @@
     <div class="calendar_block">
         <table id="calendar">
             <thead>
-            <tr class="row_title_calendar">
+            <tr class="row_title_calendar ">
                 <td class="arrow" @click="prevMonth">‹</td>
-                <td colspan="5" class="title_calendar">{{ monthName }} {{ year }}</td>
+                <td colspan="5" class="title_calendar block_title">{{ monthName }}</td>
                 <td class="arrow" @click="nextMonth">›</td>
             </tr>
             <tr class="row_deys_calendar">
@@ -19,7 +19,7 @@
             </thead>
             <tbody class="body_calendar">
             <tr v-for="(week, index) in calendar" :key="index">
-                <td
+                <td class="date_btn"
                     v-for="(day, idx) in week"
                     :key="idx"
                     :class="{ today: isToday(day), selected: isSelected(day), weekend: isWeekend(idx) && day, past: isPastDate(day)}"
@@ -160,8 +160,11 @@ export default {
 
 .selected {
     transform: perspective(600px) rotateX(20deg) rotateY(360deg);
-    border-radius: 5px;
     background-color: #1D7BF6;
-//transition: all 0.3s;
+}
+
+.date_btn {
+    border-radius: 5px;
+    transition: all 0.3s;
 }
 </style>

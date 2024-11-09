@@ -13,30 +13,35 @@ export function getAvailableTimeSlots(selectedDate) {
 
     const eventsByDate = JSON.parse(localStorage.getItem('eventsByDate') || '{}');
     const events = eventsByDate[selectedDate] || [];
+    const currentDateTime = new Date();
+    const isToday = selectedDate === currentDateTime.toISOString().split('T')[0];
 
     const occupiedSlots = events.map(event => ({
         start: event.startDateTime,
         end: event.endDateTime,
     }));
 
-    occupiedSlots.forEach(occupied => {
-        Object.keys(consultationSlots).forEach(slot => {
-            const slotEnd = addMinutes(slot, 15);
-            if (timeOverlaps(slot, slotEnd, occupied.start, occupied.end)) {
-                consultationSlots[slot] = false;
-            }
-        });
-    });
+    function markPastSlots(slots, slotDuration) {
+        Object.keys(slots).forEach(slot => {
+            const slotTime = new Date(`${selectedDate}T${slot}:00`);
+            const slotEnd = addMinutes(slot, slotDuration);
 
-    // Проверка занятости слотов приема
-    occupiedSlots.forEach(occupied => {
-        Object.keys(receptionSlots).forEach(time => {
-            const slotEnd = addMinutes(time, 60);
-            if (timeOverlaps(time, slotEnd, occupied.start, occupied.end)) {
-                receptionSlots[time] = false;
+            if (isToday && slotTime <= currentDateTime) {
+                slots[slot] = false;
+            } else {
+                occupiedSlots.forEach(occupied => {
+                    if (timeOverlaps(slot, slotEnd, occupied.start, occupied.end)) {
+                        slots[slot] = false;
+                    }
+                });
             }
         });
-    });
+    }
+
+    markPastSlots(consultationSlots, 15);
+
+    // Проверка занятости и прошедшего времени для приемов
+    markPastSlots(receptionSlots, 60);
 
     return {
         consultation: consultationSlots,

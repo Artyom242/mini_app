@@ -38,28 +38,28 @@ class TelegramController extends Controller
             if ($action === 'confirm_appointment') {
                 $this->createEvent($appointmentData);
 
-                $this->telegram->editMessageReplyMarkup([
-                    'chat_id' => $userId,
-                    'message_id' => $callbackQuery['message']['message_id'],
-                    'reply_markup' => json_encode(['inline_keyboard' => []]),
-                ]);
-
                 $this->telegram->sendMessage([
                     'chat_id' => $userId,
                     'text' => 'Запись успешно подтверждена!',
                 ]);
-            }
 
-            if ($action === 'cancel_appointment') {
                 $this->telegram->editMessageReplyMarkup([
                     'chat_id' => $userId,
                     'message_id' => $callbackQuery['message']['message_id'],
                     'reply_markup' => json_encode(['inline_keyboard' => []]),
                 ]);
+            }
 
+            if ($action === 'cancel_appointment') {
                 $this->telegram->sendMessage([
                     'chat_id' => $userId,
                     'text' => 'Запись отменена.',
+                ]);
+
+                $this->telegram->editMessageReplyMarkup([
+                    'chat_id' => $userId,
+                    'message_id' => $callbackQuery['message']['message_id'],
+                    'reply_markup' => json_encode(['inline_keyboard' => []]),
                 ]);
             }
 

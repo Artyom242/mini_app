@@ -33,31 +33,8 @@ class CalendarServiceController extends Controller
     public function getEventsForDate($date)
     {
         return Cache::remember("calendar_events_{$date}", now()->addDay(), function () use ($date) {
-            // Если события не найдены в кэше, получаем их из Google Calendar
             $events = Event::get(Carbon::parse($date)->startOfDay(), Carbon::parse($date)->endOfDay());
             return $events;
         });
-    }
-
-    public function updateCacheForDate($date)
-    {
-        $events = Event::get(Carbon::parse($date)->startOfDay(), Carbon::parse($date)->endOfDay());
-        Cache::put("calendar_events_{$date}", $events, now()->addDay());
-    }
-
-
-    public function createEvent($data)
-    {
-        $event = Event::create([
-            'name' => $data['name'],
-            'startDateTime' => $data['startDateTime'],
-            'endDateTime' => $data['endDateTime'],
-        ]);
-
-        // Обновляем кэш для указанного дня
-        $date = $data['startDateTime']->format('Y-m-d');
-        $this->updateCacheForDate($date);
-
-        return $event;
     }
 }

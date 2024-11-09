@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: 'Spinner'
+    name: "Spinner",
 };
 </script>
 
@@ -17,7 +17,7 @@ export default {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -31,7 +31,7 @@ export default {
     border: 6px solid rgba(255, 255, 255, 0.3);
     border-top-color: #ffffff;
     border-radius: 50%;
-    animation: spin 1s linear infinite; /* Анимация вращения */
+    animation: spin 1s linear infinite;
 }
 
 /* Анимация вращения спиннера */

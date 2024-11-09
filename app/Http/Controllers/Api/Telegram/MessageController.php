@@ -18,7 +18,7 @@ class MessageController extends Controller
         $date = $request->input('date');
         $formattedDate = Carbon::parse($date)->format('d.m.Y');
         $times = implode(', ', $request->input('times'));
-        $messageText = "{$formattedDate} Вы записаны на прием к {$times}. \nПожалуйста, подтвердите вашу запись.";
+        $messageText = "{$formattedDate} Вы записаны на прием к {$times}. \nПожалуйста, подтвердите вашу запись в течении 20 минут.";
 
         $appointmentId = Str::uuid()->toString();
         Cache::put("appointment_{$appointmentId}", [

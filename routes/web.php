@@ -15,20 +15,37 @@ use Spatie\GoogleCalendar\Event;
 |
 */
 
-Route::get('/', function () {
+Route::get('{any}', function () {
     return view('app');
-})->name('application');
+})->where("any", ".*");
 
-Route::get('/create', function () {
-    $event = new Event;
-    $event->name = "TEST LARAVEL";
-    $event->startDateTime = Carbon\Carbon::now();
-    $event->endDateTime = Carbon\Carbon::now()->addHours();
+Route::get('/dd', function () {
+    $userId = "1628997899";
+    $startDateTime = Carbon::now()->subYears(10);  // например, все события за последние 10 лет
+    $endDateTime = Carbon::now()->addYears(10);
+    $events = Event::get(
+        $startDateTime, $endDateTime,
+    );
+    dd($events);
+    $filteredEvents = $events->filter(function ($event) use ($userId) {
+        return strpos($event->description, "Id: {$userId}") !== false;
+    });
 
-    $event->save();
-    $e = Event::get();
-    dd($e);
+    // Если нет подходящих событий, возвращаем сообщение
+    if ($filteredEvents->isEmpty()) {
+        return response()->json(['message' => 'No events found for this user ID'], 404);
+    }
+
+    // Преобразуем события в массив для JSON-ответа
+    $result = $filteredEvents->map(function ($event) {
+        return [
+            'id' => $event->id,
+            'title' => $event->name,
+            'description' => $event->description,
+            'start' => $event->startDateTime->format('Y-m-d H:i:s'),
+            'end' => $event->endDateTime->format('Y-m-d H:i:s'),
+        ];
+    });
+    dd($result);
+    return response()->json($result);
 });
-
-// функ: все записи .. записи на дату .. создания записи ..
-// фронт: главная

@@ -1,14 +1,16 @@
 <template>
     <!--Блоки Цена/Отзывы/Мои записи-->
-    <div class="flex row gap_15">
+    <div class="flex row gap_10">
         <div class="flex blocks container_cards">
-            <router-link class="block_card" to="/prices">Цены</router-link>
-            <router-link class="block_card" to="/reviews">Отзывы</router-link>
+            <router-link class="block_card" to="/prices"><h1 class="block_title">Цены</h1></router-link>
+            <router-link class="block_card" to="/reviews"><h1 class="block_title">Отзывы</h1></router-link>
         </div>
-        <router-link class="block_card block_card__blue flex container_cards" to="/my-records">
-            <p>Мои<br>Записи</p>
-            <div class="arrow_card flex center"><span>›</span></div>
-        </router-link>
+        <div class="flex blocks container_cards">
+            <router-link class="block_card block_card__blue flex container_cards" to="/my-records">
+                <h1 class="block_title">Мои<br>Записи</h1>
+                <div class="arrow_card flex center"><span>›</span></div>
+            </router-link>
+        </div>
     </div>
 
     <div class="container_calendar flex">
@@ -19,12 +21,12 @@
 
         <transition name="expand" mode="out-in">
             <div v-if="!selectedDate" class="flex column block_time">
-                <h4 class="title_block_time">Выберите дату</h4>
+                <h4 class="little_title">Выберите дату</h4>
             </div>
 
             <div v-else class="flex column block_time">
                 <div v-if="availableSlots.consultation['08:45']">
-                    <h4 class="title_block_time">Консультация</h4>
+                    <h4 class="little_title">Консультация</h4>
                     <div class="flex row">
                         <button :class="{ selected: selectedTimes.includes('08:45') }"
                                 @click="toggleTime('08:45')" class="btn_time">8:45
@@ -32,20 +34,23 @@
                     </div>
                 </div>
                 <div v-else>
-                    <h4 class="title_close title_block_time">Консультация занята</h4>
+                    <h4 class="title_close little_title">Консультация занята</h4>
                 </div>
                 <div>
-                    <h4 class="title_block_time">Прием</h4>
-                    <div class="flex row block_time_btns">
-                        <template v-for="(available, time) in availableSlots.reception"
-                                  class="btn_time">
-                            <button v-if="available" class="btn_time"
-                                    :class="{ selected: selectedTimes.includes(time) }"
-                                    @click="toggleTime(time)">{{ time }}
-                            </button>
-                        </template>
+                    <template v-if="hasAvailableReceptionSlots">
+                        <h4 class="little_title">Прием</h4>
+                        <div class="flex row block_time_btns">
+                            <template v-for="(available, time) in availableSlots.reception">
+                                <button v-if="available" class="btn_time"
+                                        :class="{ selected: selectedTimes.includes(time) }"
+                                        @click="toggleTime(time)">{{ time }}
+                                </button>
+                            </template>
+                        </div>
+                    </template>
+                    <div v-else>
+                        <h4 class="title_close little_title">Все время для приема занято</h4>
                     </div>
-
                 </div>
             </div>
         </transition>
@@ -68,7 +73,7 @@
                         <label ref="phoneLabel" class="modal_form_label"
                                :class="{ 'active': !phone && !isPhoneFocused }" for="phone">Телефон</label>
                         <MaskInput class="input" mask="+7 (###) ### ##-##" type="tel" v-model="phone"
-                                    @input="updateMainButton"
+                                   @input="updateMainButton"
                                    @focus="onFocus('phone')"
                                    @blur="onBlur('phone')"></MaskInput>
                     </div>
@@ -105,6 +110,11 @@ export default {
             isFirstHandlerActive: true,
         };
     },
+    computed: {
+        hasAvailableReceptionSlots() {
+            return Object.values(this.availableSlots.reception).some(available => available);
+        }
+    },
     mounted() {
         let tg = window.Telegram.WebApp;
         tg.ready();
@@ -136,11 +146,14 @@ export default {
             }
         },
         async checkEvents() {
-            let tg = window.Telegram.WebApp;
+            let tg = window.Telget-eventsegram.WebApp;
             tg.MainButton.showProgress();
 
             try {
-                let response = await axios.post('api/check-events', { date: formatDate(this.selectedDate), times: this.selectedTimes });
+                let response = await axios.post('api/check-events', {
+                    date: formatDate(this.selectedDate),
+                    times: this.selectedTimes
+                });
                 const eventsByDate = response.data;
                 tg.MainButton.hideProgress();
 
@@ -171,8 +184,8 @@ export default {
             }
         },
 
-
         handleTimeData(response) {
+            console.log(response)
             this.availableSlots.consultation = response.consultation || {};
             this.availableSlots.reception = response.reception || {};
 
@@ -238,6 +251,7 @@ export default {
             // Проверяем, нужно ли показывать кнопку
             if (this.selectedTimes.length > 0) {
                 tg.MainButton.show();
+                tg.MainButton.color = "#55BC28";
             } else {
                 tg.MainButton.hide();
             }
