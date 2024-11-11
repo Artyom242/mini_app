@@ -4,7 +4,7 @@
     </div>
     <div v-else>
         <template v-if="hasEvents">
-            <div v-if="upcomingGroupedEvents.length" class="block_card block_card-blue">
+            <div v-if="upcomingGroupedEvents.length" class="block_card block_card-none-bg bottom-20">
                 <h1 class="block_title">Актуальные записи</h1>
                 <div class="container_my_events flex">
                     <div v-for="event in upcomingGroupedEvents" :key="event.date"
@@ -41,13 +41,14 @@
             </div>
 
             <!-- Прошедшие записи -->
-            <div v-if="pastGroupedEvents.length" class="block_card block_card-old">
+            <div v-if="pastGroupedEvents.length" class="block_card block_card-none-bg">
                 <h1 class="block_title">Прошедшие записи</h1>
                 <div class="container_my_events flex">
                     <div v-for="event in pastGroupedEvents" :key="event.date"
                          class="block_card block_card-white flex flex_column blocks_my_events">
                         <p class="date_my_events">{{ formatDateYMD(event.date) }}</p>
 
+                        <!-- Консультации -->
                         <div v-if="event.slots.Consultation.length" class="flex row block_card_event">
                             <div class="block_card_event_btns_times">
                                 <h4>Консультация:</h4>
@@ -60,6 +61,7 @@
                             </div>
                         </div>
 
+                        <!-- Запись на прием -->
                         <div v-if="event.slots['Appointment'].length" class="flex row block_card_event">
                             <div class="block_card_event_btns_times">
                                 <h4>Запись на прием:</h4>
@@ -73,10 +75,12 @@
                     </div>
                 </div>
             </div>
+
         </template>
 
         <!-- Если нет записей -->
         <div v-else class="non_events">
+            <img class="img img_info" :src="imagePath">
             <p>У вас пока нет записей</p>
         </div>
     </div>
@@ -95,6 +99,7 @@ export default {
             upcomingEvents: [],
             pastEvents: [],
             isLoading: true,
+            imagePath: '/images/my-events.png'
         };
     },
     computed: {
@@ -132,8 +137,7 @@ export default {
                 this.pastEvents = Object.values(response.data.past_events || []).sort((a, b) => {
                     return new Date(b.start) - new Date(a.start);
                 });
-            }
-            catch (error) {
+            } catch (error) {
                 console.log("Error loading events:", error);
             } finally {
                 this.isLoading = false;
@@ -166,6 +170,13 @@ export default {
 </script>
 
 <style scoped>
+
+.img_info {
+    width: 150px;
+}
+.bottom-20 {
+    margin-bottom: 20px;
+}
 .blocks_my_events {
     gap: 10px;
 }
@@ -186,19 +197,28 @@ export default {
 
 .container_my_events {
     gap: 10px;
+    min-height: 100px;
 }
 
-.non_events {
+.non_events{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
-    min-height: auto;
-    color: #9ca3af;
-    font-size: 13px;
 }
 
-.block_card-old {
-    margin-top: 20px;
+.non_events p {
+    color: rgba(208, 208, 210, 0.44);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.block_card-none-bg {
     background: none;
 }
 </style>

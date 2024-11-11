@@ -24,17 +24,6 @@
             </div>
 
             <div v-else class="flex column block_time">
-                <div v-if="availableSlots.consultation['08:45']">
-                    <h4 class="little_title">Консультация</h4>
-                    <div class="flex row">
-                        <button :class="{ selected: selectedTimes.includes('08:45') }"
-                                @click="toggleTime('08:45')" class="btn_time">8:45
-                        </button>
-                    </div>
-                </div>
-                <div v-else>
-                    <h4 class="title_close little_title">Консультация занята</h4>
-                </div>
                 <div>
                     <template v-if="hasAvailableReceptionSlots">
                         <h4 class="little_title">Прием</h4>
@@ -50,6 +39,17 @@
                     <div v-else>
                         <h4 class="title_close little_title">Все время для приема занято</h4>
                     </div>
+                </div>
+                <div v-if="availableSlots.consultation['08:45']">
+                    <h4 class="little_title">Консультация</h4>
+                    <div class="flex row">
+                        <button :class="{ selected: selectedTimes.includes('08:45') }"
+                                @click="toggleTime('08:45')" class="btn_time">8:45
+                        </button>
+                    </div>
+                </div>
+                <div v-else>
+                    <h4 class="title_close little_title">Консультация занята</h4>
                 </div>
             </div>
         </transition>
