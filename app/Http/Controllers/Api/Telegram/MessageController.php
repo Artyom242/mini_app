@@ -17,13 +17,14 @@ class MessageController extends Controller
         $chatId = $request->input('chat_id');
         $date = $request->input('date');
         $formattedDate = Carbon::parse($date)->format('d.m.Y');
-        $times = implode(', ', $request->input('times'));
-        $messageText = "{$formattedDate} Вы записаны на прием к {$times}. \nПожалуйста, подтвердите вашу запись в течении 20 минут.";
+        $times = $request->input('times');
+        $timesForMessage = implode(', ', $times);
+            $messageText = "{$formattedDate} Вы записаны на прием к {$timesForMessage}.";
 
         $appointmentId = Str::uuid()->toString();
         Cache::put("appointment_{$appointmentId}", [
             'chat_id' => $chatId,
-            'date' => $formattedDate,
+            'date' => $date,
             'times' => $times,
             'name' => $request->input('name'),
             'phone' => $request->input('phone'),

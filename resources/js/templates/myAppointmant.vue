@@ -110,11 +110,10 @@ export default {
     },
     mounted() {
         let tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
         tg.BackButton.show();
         tg.BackButton.onClick(function () {
             window.history.back();
+            tg.BackButton.hide();
         });
 
         tg.MainButton.hide();
@@ -199,7 +198,7 @@ export default {
 }
 
 .block_card-old {
-    margin-top: 40px;
+    margin-top: 20px;
     background: none;
 }
 </style>

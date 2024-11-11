@@ -12,7 +12,6 @@
             </router-link>
         </div>
     </div>
-
     <div class="container_calendar flex">
 
         <Calendar @timeData="handleTimeData"
@@ -124,7 +123,7 @@ export default {
         this.updateMainButton();
     },
     watch: {
-        selectedTimes(newTimes) {
+        selectedTimes() {
             this.updateMainButton();
         },
         name() {
@@ -146,7 +145,7 @@ export default {
             }
         },
         async checkEvents() {
-            let tg = window.Telget-eventsegram.WebApp;
+            let tg = window.Telegram.WebApp;
             tg.MainButton.showProgress();
 
             try {
@@ -170,7 +169,7 @@ export default {
                     tg.close();
 
                 } else {
-                    let times = eventsByDate.occupiedTimes.join(', ');
+                    let times = this.selectedTimes.join(', ');
                     let formattedDate = new Date(eventsByDate.date).toLocaleDateString('ru-RU');
 
                     tg.MainButton.hideProgress();
@@ -183,9 +182,7 @@ export default {
                 tg.showAlert("Произошла ошибка. Попробуйте позже.");
             }
         },
-
         handleTimeData(response) {
-            console.log(response)
             this.availableSlots.consultation = response.consultation || {};
             this.availableSlots.reception = response.reception || {};
 
@@ -197,7 +194,7 @@ export default {
         },
         handleDateSelection(date) {
             this.selectedDate = date;
-        },
+            },
         toggleTime(time) {
             const index = this.selectedTimes.indexOf(time);
             if (index > -1) {
@@ -212,37 +209,34 @@ export default {
 
         handleFirstButtonClick() {
             this.openModal();
-            this.isFirstHandlerActive = false; // Переключаем обработчик
-            this.updateMainButton();
+            this.isFirstHandlerActive = false;
+            setTimeout(() => {
+                this.updateMainButton();
+            }, 0);
         },
         handleSecondButtonClick() {
             this.checkEvents();
-            this.updateMainButton();
         },
         openModal() {
             this.isModalOpen = true;
-            let tg = window.Telegram.WebApp;
-            tg.MainButton.show();
+            let tg = Telegram.WebApp;
             tg.MainButton.setText("Записаться");
         },
         updateMainButton() {
-            let tg = window.Telegram.WebApp;
+            let tg = Telegram.WebApp;
+
             tg.MainButton.offClick(this.handleFirstButtonClick);
             tg.MainButton.offClick(this.handleSecondButtonClick);
 
             if (this.isFirstHandlerActive) {
-                tg.MainButton.offClick(this.handleSecondButtonClick);
-                tg.MainButton.onClick(this.handleFirstButtonClick); // Включаем первый обработчик
+                tg.MainButton.onClick(this.handleFirstButtonClick);
                 tg.MainButton.setText("Продолжить");
                 tg.MainButton.enable();
             } else {
-                tg.MainButton.offClick(this.handleFirstButtonClick);
-                tg.MainButton.onClick(this.handleSecondButtonClick); // Включаем второй обработчик
-                tg.MainButton.setText("Записаться");
-
                 const isFormValid = this.name.trim() !== '' && this.phone.trim().length >= 18;
                 if (isFormValid) {
                     tg.MainButton.enable();
+                    tg.MainButton.onClick(this.handleSecondButtonClick);
                 } else {
                     tg.MainButton.disable();
                 }
