@@ -1,9 +1,20 @@
 <template>
     <!--Блоки Цена/Отзывы/Мои записи-->
     <div class="flex row gap_10">
+        <div class="gradient_block">
+        </div>
         <div class="flex blocks container_cards">
             <router-link class="block_card" to="/prices"><h1 class="block_title">Цены</h1></router-link>
-            <router-link class="block_card" to="/reviews"><h1 class="block_title">Отзывы</h1></router-link>
+            <router-link class="block_card" to="/reviews">
+                <div class="flex flex-jc">
+                    <div class="flex row block_card_top">
+                        <h1 class="block_title">Отзывы</h1>
+
+                    </div>
+                    <p class="text-grey">Что думают о нас наши
+                        клиенты</p>
+                </div>
+            </router-link>
         </div>
         <div class="flex blocks container_cards">
             <router-link class="block_card block_card__blue flex container_cards" to="/my-records">
@@ -194,7 +205,7 @@ export default {
         },
         handleDateSelection(date) {
             this.selectedDate = date;
-            },
+        },
         toggleTime(time) {
             const index = this.selectedTimes.indexOf(time);
             if (index > -1) {
@@ -275,6 +286,39 @@ export default {
 </script>
 
 <style>
+.gradient_block {
+    width: 90px;
+    height: 120px;
+    transform: rotate(140deg);
+    position: absolute;
+    top: 90px;
+    left: 40px;
+    border-radius: 50px;
+    z-index: 0;
+    animation: rotateBackAndForth 10s ease-in-out infinite;
+    //background: linear-gradient(160deg,#ff3cac, #b2e12c, #00eaff);
+    filter: blur(10px);
+}
+@keyframes rotateBackAndForth {
+    0%, 100% {
+        transform: rotate(100deg); /* начальный угол */
+    }
+    50% {
+        transform: rotate(250deg); /* угол чуть больше начального */
+    }
+}
+.block_card .text-grey  {
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.flex-jc {
+    justify-content: space-between;
+}
+
+.text-grey {
+    color: rgba(208, 208, 210, 0.44);
+}
 
 .modal-overlay {
     position: fixed;

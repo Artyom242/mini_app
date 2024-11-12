@@ -80,8 +80,8 @@
 
         <!-- Если нет записей -->
         <div v-else class="non_events">
-            <img class="img img_info" :src="imagePath">
-            <p>У вас пока нет записей</p>
+            <img class="img img_info" :src="`/images/my-ev.webp`">
+            <p class="text-grey">У вас пока нет записей</p>
         </div>
     </div>
 </template>
@@ -99,7 +99,6 @@ export default {
             upcomingEvents: [],
             pastEvents: [],
             isLoading: true,
-            imagePath: '/images/my-events.png'
         };
     },
     computed: {
@@ -170,7 +169,6 @@ export default {
 </script>
 
 <style scoped>
-
 .img_info {
     width: 150px;
 }
