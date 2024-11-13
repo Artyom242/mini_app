@@ -3,25 +3,24 @@
     <div class="flex row gap_10">
         <div class="gradient_block">
         </div>
-        <div class="flex blocks container_cards">
-            <router-link class="block_card" to="/prices"><h1 class="block_title">Цены</h1></router-link>
+        <div class="flex column container_blocks">
+            <router-link class="block_card" to="/prices"><h2 class="margin_title title">Цены</h2></router-link>
             <router-link class="block_card" to="/reviews">
                 <div class="flex flex-jc">
                     <div class="flex row block_card_top">
-                        <h1 class="block_title">Отзывы</h1>
+                        <h2 class="margin_title title">Отзывы</h2>
 
                     </div>
-                    <p class="text-grey">Что думают о нас наши
+                    <p class="little_text">Что думают о нас наши
                         клиенты</p>
                 </div>
             </router-link>
         </div>
-        <div class="flex blocks container_cards">
-            <router-link class="block_card block_card__blue flex container_cards" to="/my-records">
-                <h1 class="block_title">Мои<br>Записи</h1>
+
+            <router-link class="block_card container_blocks block_card-blue flex-jc flex" to="/my-records">
+                <h2 class="margin_title title">Мои<br>Записи</h2>
                 <div class="arrow_card flex center"><span>›</span></div>
             </router-link>
-        </div>
     </div>
     <div class="container_calendar flex">
 
@@ -48,7 +47,7 @@
                         </div>
                     </template>
                     <div v-else>
-                        <h4 class="title_close little_title">Все время для приема занято</h4>
+                        <h4 class="text_busy">Все время для приема занято</h4>
                     </div>
                 </div>
                 <div v-if="availableSlots.consultation['08:45']">
@@ -60,7 +59,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <h4 class="title_close little_title">Консультация занята</h4>
+                    <h4 class="text_busy">Консультация занята</h4>
                 </div>
             </div>
         </transition>
@@ -69,7 +68,7 @@
     <transition name="fade">
         <div v-if="isModalOpen" class="modal-overlay" @click="closeModal">
             <div class="modal" @click.stop>
-                <h5 class="title modal_form-title">Осталось совсем немного</h5>
+                <h2 class="title modal_form-title">Осталось совсем немного</h2>
                 <div class="modal_form flex column">
                     <div class="flex column modal_form_pole">
                         <label ref="nameLabel" class="modal_form_label" :class="{ 'active': !name && !isNameFocused }"
@@ -286,38 +285,9 @@ export default {
 </script>
 
 <style>
-.gradient_block {
-    width: 90px;
-    height: 120px;
-    transform: rotate(140deg);
-    position: absolute;
-    top: 90px;
-    left: 40px;
-    border-radius: 50px;
-    z-index: 0;
-    animation: rotateBackAndForth 10s ease-in-out infinite;
-    //background: linear-gradient(160deg,#ff3cac, #b2e12c, #00eaff);
-    filter: blur(10px);
-}
-@keyframes rotateBackAndForth {
-    0%, 100% {
-        transform: rotate(100deg); /* начальный угол */
-    }
-    50% {
-        transform: rotate(250deg); /* угол чуть больше начального */
-    }
-}
-.block_card .text-grey  {
-    font-size: 12px;
-    line-height: 1.2;
-}
-
-.flex-jc {
-    justify-content: space-between;
-}
-
-.text-grey {
-    color: rgba(208, 208, 210, 0.44);
+.text_busy {
+    margin-bottom: 0;
+    color: #A5A5A5;
 }
 
 .modal-overlay {
@@ -360,18 +330,11 @@ export default {
     transform: translateY(0);
 }
 
-.title_close {
-    margin-bottom: 0;
-    color: #555;
-}
-
 .modal_form_pole {
     padding: 5px 0;
 }
 
 .modal_form-title {
-    color: white;
-    font-weight: 700;
     text-align: left;
     margin-bottom: 20px;
 }

@@ -32,7 +32,8 @@ class MessageController extends Controller
         Log::info("Cached Appointment Data", ['data' => Cache::get("appointment_{$appointmentId}")]);
 
         try {
-            $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+            $telegram = new Api("5771654442:AAEsqtfqlrLPVaW7RG8nxVcDHg6uz9LVfAI");
+//            $telegram = new Api("5771654442:AAEsqtfqlrLPVaW7RG8nxVcDHg6uz9LVfAI");
 
             $keyboard = [
                 'inline_keyboard' => [

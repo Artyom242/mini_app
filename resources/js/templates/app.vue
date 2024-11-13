@@ -1,6 +1,6 @@
 <template>
     <section class="section_white">
-        <div class="__container wrapper_calendar flex gap_15">
+        <div class="__container wrapper flex gap_15">
             <router-view/>
         </div>
     </section>

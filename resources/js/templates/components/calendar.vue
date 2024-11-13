@@ -2,9 +2,9 @@
     <div class="calendar_block">
         <table id="calendar">
             <thead>
-            <tr class="row_title_calendar ">
+            <tr class="row_title_calendar">
                 <td class="arrow" @click="prevMonth">‹</td>
-                <td colspan="5" class="title_calendar block_title">{{ monthName }}</td>
+                <td colspan="5" class="title_calendar title">{{ monthName }}</td>
                 <td class="arrow" @click="nextMonth">›</td>
             </tr>
             <tr class="row_deys_calendar">

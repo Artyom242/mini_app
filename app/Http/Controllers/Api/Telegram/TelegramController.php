@@ -18,7 +18,8 @@ class TelegramController extends Controller
 
     public function __construct()
     {
-        $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+        $this->telegram = new Api("5771654442:AAEsqtfqlrLPVaW7RG8nxVcDHg6uz9LVfAI");
+//        $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
     }
 
     public function handleCallbackQuery(Request $request)
@@ -34,6 +35,10 @@ class TelegramController extends Controller
             $appointmentData = Cache::get("appointment_{$appointmentId}");
             Log::info("AppointmentData:", ["Appoin" => $appointmentData]);
 
+            if (!$appointmentData) {
+                Log::error("Данные записи не найдены в кэше.");
+                return;
+            }
 
             if ($action === 'confirm_appointment') {
                 $this->createEvent($appointmentData);
@@ -63,7 +68,7 @@ class TelegramController extends Controller
                 ]);
             }
 
-            Cache::forget("appointment_{$appointmentId}}");
+            Cache::forget("appointment_{$appointmentId}");
             $te = Cache::get("appointment_{$appointmentId}");
             Log::info("Cash", ["cash" => $te]);
         }

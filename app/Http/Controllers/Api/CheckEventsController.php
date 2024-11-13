@@ -40,7 +40,6 @@ class CheckEventsController extends Controller
                         $isOccupied = true;
                         break;
                     }
-
                 }
 
                 if ($isOccupied) {

@@ -6,7 +6,7 @@
 }
 
 p {
-    font-size: 18px;
+    font-size: 14px;
 }
 
 a {
@@ -41,6 +41,14 @@ h5,
 h6 {
     font-size: inherit;
     font-weight: inherit;
+    font-family: "Manrope", serif;
+}
+h2 {
+    font-size: 20px;
+    line-height: 1.3;
+}
+h4 {
+    font-size: 16px;
 }
 
 html,
@@ -51,22 +59,77 @@ body {
     line-height: 1;
     font-family: "Manrope", serif;
     background: #232E3C;
+    overflow-x: hidden;
+}
+
+.wrapper {
+    min-height: 100%;
+    overflow: hidden;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 1 auto;
 }
 
 .__container {
-    max-width: 1300px;
+    max-width: 600px;
     margin: 0 auto;
     padding: 0 10px;
 }
 
+.title_big{
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+}
+
 .title {
-    font-size: 16px;
-    font-weight: 500;
+    font-weight: bold;
+    color: white;
 }
 
 .title_center {
     text-align: center;
     margin-bottom: 10px;
+}
+
+.title_calendar {
+    color: #2f2f2f;
+    font-size: 20px;
+}
+
+.margin_title {
+    margin-bottom: 25px;
+}
+
+.section_start_title {
+    margin-top: 20px;
+    position: relative;
+}
+
+.little_text {
+    font-size: 14px;
+    line-height: 1.2;
+    color: #A5A5A5;
+}
+
+.text-grey {
+    color: #A5A5A5;
+}
+
+.medium_title{
+    font-size: 16px;
+}
+
+.section_mt {
+    margin-top: 40px;
 }
 
 /* Calendar */
@@ -114,8 +177,8 @@ body {
     border-spacing: 30px;
 }
 #calendar .body_calendar tr td {
-    height: 30px;
-    width: 40px;
+    height: 33px;
+    width: 45px;
     font-size: 16px;
     cursor: pointer;
 }
@@ -125,17 +188,20 @@ body {
     color: white;
 }
 
-.title_calendar {
-    font-size: 22px;
-    color: #2f2f2f;
-}
-
 .row_title_calendar {
     height: 40px;
     vertical-align: top;
 }
 
-/* blocks_row */
+/* helpers */
+.img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+}
 
 .flex {
     display: flex;
@@ -155,6 +221,28 @@ body {
 .column {
     flex-direction: column;
 }
+
+.flex-jc {
+    justify-content: space-between;
+}
+
+.ai-end {
+    align-items: end;
+}
+
+.flex_full_height{
+    flex: 1 1;
+}
+
+.wrap {
+    flex-wrap: wrap;
+}
+
+.ml_5{
+    margin-left: 5px;
+}
+
+/*--------------*/
 
 .block_time {
     gap: 20px;
@@ -176,10 +264,10 @@ body {
 .btn_time {
     border-radius: 5px;
     border: 1px solid #1D7BF6;
-    padding: 5px;
+    padding: 7px;
     min-width: 65px;
     background: none;
-    font-size: 14px;
+    font-size: 16px;
     transition: all 0.3s;
     transform: perspective(600px) rotateX(20deg) rotateY(0deg);
 }
@@ -194,31 +282,32 @@ body {
     gap: 10px;
 }
 
-/* ---- */
+.two_block_card {
+    padding: 0 15px;
+    width: 100%;
+}
 
+/* ---- */
+.gap_5 {
+    gap: 5px;
+}
 .gap_10 {
     gap: 10px;
 }
-
-.container_cards {
-    gap: 10px;
+.container_blocks {
     width: 100%;
-    flex-grow: 1;
-    z-index: 10;
-}
-
-.block_title {
-    font-weight: bold;
-    font-size: 20px;
-    color: white;
-    margin-bottom: 25px;
+    gap: 10px;
 }
 
 .block_card {
     border-radius: 20px;
-    background: #17212B;
+    /*background: rgb(23, 33, 43);*/
+    background: rgba(23, 33, 43, 0.94);
     min-height: 50px;
     padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 10;
 }
 
 .block_card-white {
@@ -229,20 +318,9 @@ body {
     background: #1D7BF6;
 }
 
-.blocks_my_events{
-
-}
-
 .block_card_event {
     align-items: center;
     flex-grow: 1;
-}
-
-.block_card__blue {
-    width: auto;
-    background: #1D7BF6;
-    line-height: 1.3;
-    justify-content: space-between;
 }
 
 .selectedTimes {
@@ -274,27 +352,29 @@ body {
     z-index: 10;
 }
 
-/* img */
-.img {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    object-fit: cover;
+/* ---- Price-----*/
+
+.gradient_block {
+    width: 90px;
+    height: 150px;
+    transform: rotate(140deg);
+    position: absolute;
+    top: 90px;
+    left: 40px;
+    border-radius: 50px;
+    z-index: 0;
+    animation: rotateBackAndForth 10s ease-in-out infinite;
+    background: linear-gradient(160deg,#b2e12c, #7cefbf, #ffa433);
+    filter: blur(10px);
+}
+@keyframes rotateBackAndForth {
+    0%, 100% {
+        transform: rotate(100deg); /* начальный угол */
+    }
+    50% {
+        transform: rotate(250deg); /* угол чуть больше начального */
+    }
 }
 
-/* РАдио */
-.form_radio_btn {
-    display: block;
-    width: 50%;
-}
-.form_radio_btn input[type="radio"] {
-    display: none;
-}
-
-.modal_form {
-    width: 100%;
-}
 
 
