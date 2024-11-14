@@ -22,8 +22,48 @@ class TelegramController extends Controller
 //        $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
     }
 
+    public function handleWebhook(Request $request)
+    {
+        $message = $request->input('message');
+        $callbackQuery = $request->input('callback_query');
+
+        if (isset($message['text']) && $message['text'] === '/start') {
+            $this->handleStart($message['chat']['id']);
+            return;
+        }
+
+        if ($callbackQuery) {
+            $this->handleCallbackQuery($callbackQuery);
+        }
+    }
+
+    public function handleStart($chatId)
+    {
+        $text = "Добро пожаловать! Нажмите на кнопку 'Открыть' в самом низу или под этим сообщением, чтобы запустить Mini App.";
+
+        $keyboard = [
+            'inline_keyboard' => [
+                [
+                    [
+                        'text' => 'Открыть',
+                        'web_app' => [
+                            'url' => 'https://6d4e-188-162-6-104.ngrok-free.app'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->telegram->sendMessage([
+            'chat_id' => $chatId,
+            'text' => $text,
+            'reply_markup' => json_encode($keyboard)
+        ]);
+    }
+
     public function handleCallbackQuery(Request $request)
     {
+
         $callbackQuery = $request->input('callback_query');
 
         if ($callbackQuery) {

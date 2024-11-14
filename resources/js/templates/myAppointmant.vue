@@ -10,33 +10,21 @@
                     <h1 class="title_big margin_title ml_5">Мои записи</h1>
 
                     <div class="flex column gap_5">
-                        <template v-for="event in upcomingGroupedEvents" :key="event.date">
-                            <template v-for="time in event.slots">
-                                <div class="block_card flex">
-                                    <div class="mb_20">
-                                        <h4 class="block_card_price--title title">{{ formatDateYMD(event.date) }}</h4>
-                                        <div class="blue_line"></div>
-                                    </div>
-                                    <div class="flex gap_10 row wrap">
-                                        <template v-for="(time, index) in event.slots">
-                                            <div v-if="index === event.slots.length - 1 && event.slots.length % 2 !== 0" class="block_card block_card-blue flex center column">
-                                                <h2 class="title_big">{{ time }}</h2>
+                        <template v-for="(event, index) in upcomingGroupedEvents" :key="event.date">
+                            <template v-for="(time) in event.slots">
+                                <div class="block_card">
+                                    <div class="two_block_card row flex flex-jc">
+                                        <div class="flex row center gap_10">
+                                            <h2 class="title_big ml_5">{{ event.day }}</h2>
+                                            <div>
+                                                <h4 class="title" style="margin-bottom: 4px">{{ event.month }}</h4>
                                                 <p v-if="time === '8:45'" class="text-grey">Консультация</p>
-                                                <p v-else class="little_text">Прием</p>
+                                                <p v-else class="text-grey">Прием</p>
                                             </div>
-                                            <div v-else class="flex row gap_10 width_100">
-                                                <div class="block_card border_blue flex center column">
-                                                    <h2 class="title_big">{{ time }}</h2>
-                                                    <p v-if="time === '8:45'" class="text-grey">Консультация</p>
-                                                    <p v-else class="text-grey">Прием</p>
-                                                </div>
-                                                <div class="block_card block_card-blue flex center column">
-                                                    <h2 class="title_big">{{ time }}</h2>
-                                                    <p v-if="time === '8:45'" class="text-grey">Консультация</p>
-                                                    <p v-else class="little_text">Прием</p>
-                                                </div>
-                                            </div>
-                                        </template>
+                                        </div>
+                                        <div :class="['block_card', { 'block_card-blue': index === upcomingGroupedEvents.length - 1, 'border_blue': index !== upcomingGroupedEvents.length - 1}]" class="flex center" style="max-width: 130px">
+                                            <h2 class="title_big">{{time}}</h2>
+                                        </div>
                                     </div>
                                 </div>
                             </template>
@@ -51,25 +39,22 @@
 
                     <div class="flex column gap_5">
                         <template v-for="event in pastGroupedEvents" :key="event.date">
-                            <template v-for="time in event.slots">
-                                <div class="block_card flex row ">
-                                    <div class="two_block_card ai-end row flex flex-jc">
-                                        <div class="flex column">
-                                            <h2 class="title_big">{{ time }}</h2>
-                                            <p v-if="time === '8:45'" class="text-grey">Консультация</p>
-                                            <p v-else class="text-grey">Прием</p>
+                            <template v-for="(time, index) in event.slots">
+                                <div class="block_card">
+                                    <div class="two_block_card row flex flex-jc">
+                                        <div class="flex row center gap_10">
+                                            <h2 class="title_big ml_5">{{ event.day }}</h2>
+                                            <div>
+                                                <h4 class="title" style="margin-bottom: 4px">{{ event.month }}</h4>
+                                                <p v-if="time === '8:45'" class="text-grey">Консультация</p>
+                                                <p v-else class="text-grey">Прием</p>
+                                            </div>
                                         </div>
-                                        <p class="text-grey">{{ formatDateYMD(event.date) }}</p>
+                                        <div class="block_card flex center" style="max-width: 130px">
+                                            <h2 class="title_big text-grey">{{ time }}</h2>
+                                        </div>
                                     </div>
                                 </div>
-                                <!--                                <div class="block_card flex row ai-end">-->
-                                <!--                                    <div class="flex column">-->
-                                <!--                                        <h2 class="title_big">{{ time }}</h2>-->
-                                <!--                                        <p v-if="time === '8:45'" class="text-grey">Консультация</p>-->
-                                <!--                                        <p v-else class="text-grey">Прием</p>-->
-                                <!--                                    </div>-->
-                                <!--                                    <p class="text-grey">{{ formatDateYMD(event.date) }}</p>-->
-                                <!--                                </div>-->
                             </template>
                         </template>
                     </div>
@@ -126,7 +111,6 @@ export default {
         this.loadEvents(userId);
     },
     methods: {
-        formatDateYMD,
         async loadEvents(userId) {
             try {
                 const response = await axios.post('/api/get-events', {id_user: userId});
@@ -148,12 +132,24 @@ export default {
                 return [];
             }
             const grouped = {};
+            const monthNames = [
+                'Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня',
+                'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'
+            ];
 
             events.forEach(event => {
                 const [date, time] = event.start.split(' ');
+                const [year, month, day] = date.split('-');
+
+                const dayNumber = parseInt(day, 10);
+                const monthName = monthNames[parseInt(month, 10) - 1];
 
                 if (!grouped[date]) {
-                    grouped[date] = {date, slots: []};
+                    grouped[date] = {
+                        day: dayNumber,
+                        month: monthName,
+                        slots: []
+                    };
                 }
 
                 grouped[date].slots.push(time);

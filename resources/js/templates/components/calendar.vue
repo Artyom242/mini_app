@@ -3,9 +3,9 @@
         <table id="calendar">
             <thead>
             <tr class="row_title_calendar">
-                <td class="arrow" @click="prevMonth">‹</td>
+                <td class="arrow" style="transform: rotateY(180deg)" @click="prevMonth"><svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" width="24"><polyline points="9 18 15 12 9 6"/></svg></td>
                 <td colspan="5" class="title_calendar title">{{ monthName }}</td>
-                <td class="arrow" @click="nextMonth">›</td>
+                <td class="arrow" @click="nextMonth"><svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" width="24"><polyline points="9 18 15 12 9 6"/></svg></td>
             </tr>
             <tr class="row_deys_calendar">
                 <td>Пн</td>

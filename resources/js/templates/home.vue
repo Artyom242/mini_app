@@ -1,36 +1,41 @@
 <template>
     <!--Блоки Цена/Отзывы/Мои записи-->
-    <div class="flex row gap_10">
-        <div class="gradient_block">
-        </div>
+    <div class="flex row mb_10 gap_10 container_rel">
+        <div class="gradient_block"></div>
         <div class="flex column container_blocks">
-            <router-link class="block_card" to="/prices"><h2 class="margin_title title">Цены</h2></router-link>
-            <router-link class="block_card" to="/reviews">
-                <div class="flex flex-jc">
-                    <div class="flex row block_card_top">
-                        <h2 class="margin_title title">Отзывы</h2>
-
-                    </div>
-                    <p class="little_text">Что думают о нас наши
-                        клиенты</p>
+            <router-link class="block_card" to="/prices">
+                <div class="flex row container_rel">
+                    <h2 class="title mb_5">Цены</h2>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
+                <p class="little_text">Актуальные цены на услуги</p>
+
+            </router-link>
+            <router-link class="block_card" to="/reviews">
+                <div class="flex row container_rel">
+                    <h2 class="title mb_5">Отзывы</h2>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"/></svg>
+                </div>
+                <p class="little_text">Что думают о нас наши
+                    клиенты</p>
             </router-link>
         </div>
 
-            <router-link class="block_card container_blocks block_card-blue flex-jc flex" to="/my-records">
-                <h2 class="margin_title title">Мои<br>Записи</h2>
-                <div class="arrow_card flex center"><span>›</span></div>
-            </router-link>
+        <router-link class="block_card container_blocks block_card-blue flex-jc flex" to="/my-records">
+            <h2 class="margin_title title">Мои<br>Записи</h2>
+            <div class="arrow_card flex center"><svg width="18" height="18" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16.7071 8.70711C17.0976 8.31658 17.0976 7.68342 16.7071 7.29289L10.3431 0.928932C9.95262 0.538408 9.31946 0.538408 8.92893 0.928932C8.53841 1.31946 8.53841 1.95262 8.92893 2.34315L14.5858 8L8.92893 13.6569C8.53841 14.0474 8.53841 14.6805 8.92893 15.0711C9.31946 15.4616 9.95262 15.4616 10.3431 15.0711L16.7071 8.70711ZM0 9H16V7H0V9Z" fill="#1D7BF6"/>
+            </svg></div>
+        </router-link>
     </div>
-    <div class="container_calendar flex">
-
+    <div class="block_card flex gap_10">
         <Calendar @timeData="handleTimeData"
                   @dateSelected="handleDateSelection"
         ></Calendar>
-
         <transition name="expand" mode="out-in">
-            <div v-if="!selectedDate" class="flex column block_time">
-                <h4 class="little_title">Выберите дату</h4>
+            <div v-if="!selectedDate">
+                <h4 class="block_card_price--title title">Выберите дату</h4>
+                <div class="blue_line"></div>
             </div>
 
             <div v-else class="flex column block_time">
@@ -285,6 +290,7 @@ export default {
 </script>
 
 <style>
+
 .text_busy {
     margin-bottom: 0;
     color: #A5A5A5;

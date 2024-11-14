@@ -184,12 +184,12 @@ main {
 }
 
 .arrow {
-    font-size: 30px;
     color: white;
 }
 
 .row_title_calendar {
-    height: 40px;
+    height: 30px;
+    text-align: center;
     vertical-align: top;
 }
 
@@ -283,8 +283,9 @@ main {
 }
 
 .two_block_card {
-    padding: 0 15px;
+    padding: 0;
     width: 100%;
+    box-sizing: border-box;
 }
 
 /* ---- */
@@ -301,7 +302,6 @@ main {
 
 .block_card {
     border-radius: 20px;
-    /*background: rgb(23, 33, 43);*/
     background: rgba(23, 33, 43, 0.94);
     min-height: 50px;
     padding: 15px;
@@ -343,23 +343,15 @@ main {
     height: 30px;
 }
 
-.container_calendar {
-    padding: 25px;
-    border-radius: 20px;
-    background: #17212B;
-    gap: 20px;
-    margin-top: 10px;
-    z-index: 10;
-}
 
 /* ---- Price-----*/
 
 .gradient_block {
-    width: 90px;
-    height: 150px;
+    width: 80px;
+    height: 130px;
     transform: rotate(140deg);
     position: absolute;
-    top: 90px;
+    top: 70px;
     left: 40px;
     border-radius: 50px;
     z-index: 0;

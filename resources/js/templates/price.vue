@@ -324,6 +324,9 @@ export default {
 .mb_10 {
     margin-bottom: 10px;
 }
+.mb_5{
+    margin-bottom: 5px;
+}
 
 .mb_20 {
     margin-bottom: 20px;
