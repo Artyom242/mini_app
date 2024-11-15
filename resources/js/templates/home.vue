@@ -4,17 +4,23 @@
         <div class="gradient_block"></div>
         <div class="flex column container_blocks">
             <router-link class="block_card" to="/prices">
-                <div class="flex row container_rel">
+                <div class="flex row container_rel flex-jc">
                     <h2 class="title mb_5">Цены</h2>
-                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"/></svg>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                         stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
                 </div>
                 <p class="little_text">Актуальные цены на услуги</p>
 
             </router-link>
             <router-link class="block_card" to="/reviews">
-                <div class="flex row container_rel">
+                <div class="flex row container_rel flex-jc">
                     <h2 class="title mb_5">Отзывы</h2>
-                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="9 18 15 12 9 6"/></svg>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                         stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
                 </div>
                 <p class="little_text">Что думают о нас наши
                     клиенты</p>
@@ -23,13 +29,58 @@
 
         <router-link class="block_card container_blocks block_card-blue flex-jc flex" to="/my-records">
             <h2 class="margin_title title">Мои<br>Записи</h2>
-            <div class="arrow_card flex center"><svg width="18" height="18" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16.7071 8.70711C17.0976 8.31658 17.0976 7.68342 16.7071 7.29289L10.3431 0.928932C9.95262 0.538408 9.31946 0.538408 8.92893 0.928932C8.53841 1.31946 8.53841 1.95262 8.92893 2.34315L14.5858 8L8.92893 13.6569C8.53841 14.0474 8.53841 14.6805 8.92893 15.0711C9.31946 15.4616 9.95262 15.4616 10.3431 15.0711L16.7071 8.70711ZM0 9H16V7H0V9Z" fill="#1D7BF6"/>
-            </svg></div>
+            <div class="arrow_card flex center">
+                <svg width="18" height="18" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M16.7071 8.70711C17.0976 8.31658 17.0976 7.68342 16.7071 7.29289L10.3431 0.928932C9.95262 0.538408 9.31946 0.538408 8.92893 0.928932C8.53841 1.31946 8.53841 1.95262 8.92893 2.34315L14.5858 8L8.92893 13.6569C8.53841 14.0474 8.53841 14.6805 8.92893 15.0711C9.31946 15.4616 9.95262 15.4616 10.3431 15.0711L16.7071 8.70711ZM0 9H16V7H0V9Z"
+                        fill="#1D7BF6"/>
+                </svg>
+            </div>
         </router-link>
     </div>
+
+    <div class="section_mt container_rel">
+        <h2 class="title_big margin_title ml_5">Ближайшие <br> свободные записи</h2>
+        <img class="img_fon img_calendar" :src="`/images/home-calendar.webp`">
+
+        <div class="flex column gap_10 mb_10">
+            <button v-if="freeConsultation" class="block_card btn_next_app"
+                    @click="handleNearestSlot('consultation')">
+                <div class="two_block_card row flex flex-jc">
+                    <div class="flex row center gap_10">
+                        <h2 class="title_big ml_5">{{ formatDay(freeConsultation.date) }}</h2>
+                        <div class="flex column">
+                            <h4 class="title">{{ formatMonth(freeReception.date) }}</h4>
+                            <p class="text-grey text-14">Консультация в {{ freeConsultation.time }}</p>
+                        </div>
+                    </div>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                         stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </button>
+            <button v-if="freeReception" class="block_card btn_next_app"
+                    @click="handleNearestSlot('reception')">
+                <div class="two_block_card row flex flex-jc">
+                    <div class="flex row center gap_10">
+                        <h2 class="title_big ml_5">{{ formatDay(freeReception.date) }}</h2>
+                        <div class="flex column">
+                            <h4 class="title">{{ formatMonth(freeReception.date) }}</h4>
+                            <p class="text-grey text-14">Прием в {{ freeReception.time }}</p>
+                        </div>
+                    </div>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                         stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </button>
+        </div>
+    </div>
     <div class="block_card flex gap_10">
-        <Calendar @timeData="handleTimeData"
+        <Calendar ref="calendarRef"
+                  @timeData="handleTimeData"
                   @dateSelected="handleDateSelection"
         ></Calendar>
         <transition name="expand" mode="out-in">
@@ -98,8 +149,9 @@
 </template>
 <script>
 import Calendar from './components/calendar.vue';
-import {formatDate} from "../convert-data.js"
+import {formatDate, groupEvents} from "../convert-data.js"
 import {MaskInput} from 'vue-3-mask';
+import {findNearestAvailableSlots} from "../findNearestAvailableSlots.js";
 
 export default {
     name: 'Home',
@@ -122,21 +174,25 @@ export default {
             isNameFocused: false,
             isPhoneFocused: false,
             isFirstHandlerActive: true,
+            freeConsultation: null,
+            freeReception: null,
         };
     },
     computed: {
         hasAvailableReceptionSlots() {
             return Object.values(this.availableSlots.reception).some(available => available);
-        }
+        },
     },
     mounted() {
         let tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-
+        console.log(localStorage.getItem('eventsByDate'));
         this.initializeCache();
         this.updateMainButton();
+        this.findNearestAvailableSlot();
     },
+
     watch: {
         selectedTimes() {
             this.updateMainButton();
@@ -149,6 +205,22 @@ export default {
         }
     },
     methods: {
+        async handleNearestSlot(slotType) {
+            let slotData;
+
+            if (slotType === 'consultation') {
+                slotData = this.freeConsultation;
+            } else if (slotType === 'reception') {
+                slotData = this.freeReception;
+            }
+
+            if (!slotData) return;
+            const {date, time} = slotData;
+            this.$refs.calendarRef.updateCalendarWithNearestSlot(date);
+
+            this.selectedTimes = [];
+            this.selectedTimes = [...this.selectedTimes, time];
+        },
         async initializeCache() {
             try {
                 let response = await axios.post('api/initialize-cache');
@@ -197,6 +269,25 @@ export default {
                 tg.showAlert("Произошла ошибка. Попробуйте позже.");
             }
         },
+        async findNearestAvailableSlot() {
+            const nearestSlots = await findNearestAvailableSlots();
+
+            this.freeConsultation = nearestSlots.consultation;
+            this.freeReception = nearestSlots.reception;
+        },
+
+        formatDay(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.getDate();
+        },
+        formatMonth(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const month = date.toLocaleString('ru-RU', {month: 'long'});
+            return month.charAt(0).toUpperCase() + month.slice(1);
+        },
+
         handleTimeData(response) {
             this.availableSlots.consultation = response.consultation || {};
             this.availableSlots.reception = response.reception || {};
@@ -290,6 +381,20 @@ export default {
 </script>
 
 <style>
+.text-14 {
+    font-size: 14px;
+}
+
+.text-20 {
+    font-size: 16px;
+}
+
+.img_calendar {
+    width: 140px;
+    top: -40px;
+    right: -15px;
+    transform: rotate(-30deg);
+}
 
 .text_busy {
     margin-bottom: 0;

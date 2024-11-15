@@ -7,11 +7,34 @@ export function formatDate(date) {
     return `${year}-${month}-${day}`;
 }
 
-export function formatDateYMD(date) {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
-    const year = d.getFullYear();
+export function groupEvents(events) {
+    if (!Array.isArray(events)) {
+        console.error("Expected an array of events, but got:", events);
+        return [];
+    }
+    const grouped = {};
+    const monthNames = [
+        'Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня',
+        'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'
+    ];
 
-    return `${day}.${month}.${year}`;
+    events.forEach(event => {
+        const [date, time] = event.start.split(' ');
+        const [year, month, day] = date.split('-');
+
+        const dayNumber = parseInt(day, 10);
+        const monthName = monthNames[parseInt(month, 10) - 1];
+
+        if (!grouped[date]) {
+            grouped[date] = {
+                day: dayNumber,
+                month: monthName,
+                slots: []
+            };
+        }
+
+        grouped[date].slots.push(time);
+    });
+
+    return Object.values(grouped);
 }

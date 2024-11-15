@@ -1,5 +1,5 @@
 <template>
-    <div class="section_start_title my_events_section">
+    <div class="section_start_title">
         <div v-if="isLoading">
             <Spinner></Spinner>
         </div>
@@ -51,7 +51,7 @@
                                             </div>
                                         </div>
                                         <div class="block_card flex center" style="max-width: 130px">
-                                            <h2 class="title_big text-grey">{{ time }}</h2>
+                                            <h2 class="title_big">{{ time }}</h2>
                                         </div>
                                     </div>
                                 </div>
@@ -63,9 +63,9 @@
             </template>
 
             <!-- Если нет записей -->
-            <div v-else class="non_events flex center column">
+            <div v-else class="flex center column non_events">
                 <img class="img" style="width: 150px;" :src="`/images/my-ev.webp`">
-                <p class="text-grey">У вас пока нет записей</p>
+                <p class="little_text">У вас пока нет записей</p>
             </div>
         </template>
     </div>
@@ -74,7 +74,7 @@
 <script>
 import axios from 'axios';
 import Spinner from "./components/spinner.vue";
-import {formatDateYMD} from "../convert-data.js";
+import {groupEvents} from "@/convert-data.js";
 
 export default {
     name: 'MyEvents',
@@ -88,10 +88,10 @@ export default {
     },
     computed: {
         upcomingGroupedEvents() {
-            return this.upcomingEvents ? this.groupEvents(this.upcomingEvents) : [];
+            return this.upcomingEvents ? groupEvents(this.upcomingEvents) : [];
         },
         pastGroupedEvents() {
-            return this.pastEvents ? this.groupEvents(this.pastEvents) : [];
+            return this.pastEvents ? groupEvents(this.pastEvents) : [];
         },
         hasEvents() {
             return this.upcomingGroupedEvents.length || this.pastGroupedEvents.length;
@@ -126,46 +126,11 @@ export default {
                 this.isLoading = false;
             }
         },
-        groupEvents(events) {
-            if (!Array.isArray(events)) {
-                console.error("Expected an array of events, but got:", events);
-                return [];
-            }
-            const grouped = {};
-            const monthNames = [
-                'Января', 'Февраля', 'Марта', 'Апреля', 'Мая', 'Июня',
-                'Июля', 'Августа', 'Сентября', 'Октября', 'Ноября', 'Декабря'
-            ];
-
-            events.forEach(event => {
-                const [date, time] = event.start.split(' ');
-                const [year, month, day] = date.split('-');
-
-                const dayNumber = parseInt(day, 10);
-                const monthName = monthNames[parseInt(month, 10) - 1];
-
-                if (!grouped[date]) {
-                    grouped[date] = {
-                        day: dayNumber,
-                        month: monthName,
-                        slots: []
-                    };
-                }
-
-                grouped[date].slots.push(time);
-            });
-
-            return Object.values(grouped);
-        }
     }
 }
 </script>
 
 <style scoped>
-.width_100 {
-    width: 100%;
-}
-
 .img_check {
     top: -20px;
     right: 10px;
@@ -173,47 +138,10 @@ export default {
     transform: rotate(-15deg);
 }
 
-.my_events_section .little_text {
-    color: white;
-    margin-bottom: 0;
-    font-weight: normal;
-}
-
-.bottom-20 {
-    margin-bottom: 20px;
-}
-
-.blocks_my_events {
-    gap: 10px;
-}
-
-.block_card_event:not(:last-child) {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #BBBBBB;
-}
-
-.block_card_event_btns_times {
-    width: 50%;
-}
-
-.date_my_events {
-    color: #575757;
-    font-size: 13px;
-}
-
-.container_my_events {
-    gap: 10px;
-    min-height: 100px;
-}
-
 .non_events {
     position: absolute;
-    left: 0;
+    left: 50%;
     top: 50%;
-    text-align: center;
-}
-
-.block_card-none-bg {
-    background: none;
+    transform: translate(-50%, -50%);
 }
 </style>

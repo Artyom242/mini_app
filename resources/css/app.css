@@ -24,6 +24,7 @@ button {
     cursor: pointer;
     color: white;
 }
+
 input::placeholder {
     color: #919191;
 }
@@ -111,7 +112,6 @@ main {
 
 .section_start_title {
     margin-top: 20px;
-    position: relative;
 }
 
 .little_text {
@@ -343,6 +343,9 @@ main {
     height: 30px;
 }
 
+.btn_next_app {
+    text-align: left;
+}
 
 /* ---- Price-----*/
 

@@ -54,7 +54,7 @@
                         <div class="block_price">
                             <div class="flex column" style="text-align: end">
                                 <p class="title_big">2000</p>
-                                <p class="text-grey">до 2500</p>
+                                <p class="text-white">до 2500</p>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                         <div class="block_price">
                             <div class="flex column" style="text-align: end">
                                 <p class="title_big">3000</p>
-                                <p class="text-grey">до 4000</p>
+                                <p class="text-white">до 4000</p>
                             </div>
                         </div>
                     </div>
@@ -267,7 +267,7 @@ export default {
     color: white;
 }
 
-.block_price .text-grey {
+.text-white {
     color: white;
 }
 

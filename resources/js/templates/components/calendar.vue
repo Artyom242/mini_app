@@ -35,7 +35,6 @@
 </template>
 <script>
 import {ref, computed} from 'vue';
-import axios from "axios";
 import {formatDate} from "../../convert-data.js"
 import {getAvailableTimeSlots} from "../../getEventsCalendar.js"
 
@@ -111,13 +110,28 @@ export default {
                     emit('timeData', []);
                 } else {
                     selectedDate.value = {day, month: month.value + 1, year: year.value};
-                    const formattedDate = formatDate(selectedDate.value);
 
+                    const formattedDate = formatDate(selectedDate.value);
                     let events = getAvailableTimeSlots(formattedDate);
                     emit('dateSelected', selectedDate.value);
                     emit('timeData', events);
                 }
             }
+        };
+        const updateCalendarWithNearestSlot = (date) => {
+            const day = new Date(date).getDate();
+            const newMonth = new Date(date).getMonth();
+            const newYear = new Date(date).getFullYear();
+
+            year.value = newYear;
+            month.value = newMonth;
+            selectedDate.value = { day, month: newMonth + 1, year: newYear };
+
+            const formattedDate = formatDate(selectedDate.value);
+            let events = getAvailableTimeSlots(formattedDate);
+
+            emit('dateSelected', selectedDate.value);
+            emit('timeData', events);
         };
 
         const isPastDate = (day) => {
@@ -138,9 +152,10 @@ export default {
             isWeekend,
             isSelected,
             isPastDate,
-
+            updateCalendarWithNearestSlot,
         };
     },
+
 };
 </script>
 
