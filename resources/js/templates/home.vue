@@ -187,7 +187,6 @@ export default {
         let tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-        console.log(localStorage.getItem('eventsByDate'));
         this.initializeCache();
         this.updateMainButton();
         this.findNearestAvailableSlot();
@@ -217,7 +216,6 @@ export default {
             if (!slotData) return;
             const {date, time} = slotData;
             this.$refs.calendarRef.updateCalendarWithNearestSlot(date);
-
             this.selectedTimes = [];
             this.selectedTimes = [...this.selectedTimes, time];
         },
@@ -276,6 +274,12 @@ export default {
             this.freeReception = nearestSlots.reception;
         },
 
+        scrollToBottom() {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth',
+            });
+        },
         formatDay(dateString) {
             if (!dateString) return '';
             const date = new Date(dateString);
@@ -300,6 +304,9 @@ export default {
         },
         handleDateSelection(date) {
             this.selectedDate = date;
+            setTimeout(()=>{
+                this.scrollToBottom();
+            },200);
         },
         toggleTime(time) {
             const index = this.selectedTimes.indexOf(time);

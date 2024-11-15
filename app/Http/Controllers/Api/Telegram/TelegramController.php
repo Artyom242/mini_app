@@ -28,6 +28,13 @@ class TelegramController extends Controller
         $callbackQuery = $request->input('callback_query');
 
         if (isset($message['text']) && $message['text'] === '/start') {
+            $chatId = $message['chat']['id'];
+            $username = $message['chat']['username'] ?? 'не указан';
+            $phoneNumber = $message['contact']['phone_number'] ?? 'не указан';
+
+            $userData = "ID: {$chatId}, Username: {$username}, Phone: {$phoneNumber}" . PHP_EOL;
+            file_put_contents(storage_path('logs/user_data.log'), $userData, FILE_APPEND);
+
             $this->handleStart($message['chat']['id']);
             return;
         }

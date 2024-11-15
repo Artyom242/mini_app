@@ -29,12 +29,4 @@ class CalendarServiceController extends Controller
 
         return response()->json($eventsByDate);
     }
-
-    public function getEventsForDate($date)
-    {
-        return Cache::remember("calendar_events_{$date}", now()->addDay(), function () use ($date) {
-            $events = Event::get(Carbon::parse($date)->startOfDay(), Carbon::parse($date)->endOfDay());
-            return $events;
-        });
-    }
 }
