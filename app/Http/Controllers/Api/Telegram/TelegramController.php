@@ -61,10 +61,8 @@ class TelegramController extends Controller
         ]);
     }
 
-    public function handleCallbackQuery(Request $request)
+    public function handleCallbackQuery(array  $callbackQuery)
     {
-
-        $callbackQuery = $request->input('callback_query');
 
         if ($callbackQuery) {
             $userId = $callbackQuery['from']['id'];
