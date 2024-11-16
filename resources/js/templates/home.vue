@@ -126,8 +126,10 @@
             <div class="modal" @click.stop>
                 <h2 class="title modal_form-title">Осталось совсем немного</h2>
                 <div class="modal_form flex column">
+                    <img class="img_fon img_zap" :src="`/images/home-zap.webp`">
+
                     <div class="flex column modal_form_pole">
-                        <label ref="nameLabel" class="modal_form_label" :class="{ 'active': !name && !isNameFocused }"
+                        <label ref="nameLabel" class="text-grey modal_form_label" :class="{ 'active': !name && !isNameFocused }"
                                for="name">Имя</label>
                         <input class="input" type="text" v-model="name"
                                @input="updateMainButton"
@@ -135,7 +137,7 @@
                                @blur="onBlur('name')"/>
                     </div>
                     <div class="flex column modal_form_pole">
-                        <label ref="phoneLabel" class="modal_form_label"
+                        <label ref="phoneLabel" class="text-grey modal_form_label"
                                :class="{ 'active': !phone && !isPhoneFocused }" for="phone">Телефон</label>
                         <MaskInput class="input" mask="+7 (###) ### ##-##" type="tel" v-model="phone"
                                    @input="updateMainButton"
@@ -306,7 +308,7 @@ export default {
             this.selectedDate = date;
             setTimeout(()=>{
                 this.scrollToBottom();
-            },200);
+            },300);
         },
         toggleTime(time) {
             const index = this.selectedTimes.indexOf(time);
@@ -403,6 +405,15 @@ export default {
     transform: rotate(-30deg);
 }
 
+.img_zap{
+    width: 150px;
+    top: -40px;
+    right: -15px;
+    pointer-events: none;
+    user-select: none;
+    transform: rotate(15deg);
+}
+
 .text_busy {
     margin-bottom: 0;
     color: #A5A5A5;
@@ -421,11 +432,12 @@ export default {
 }
 
 .modal {
-    background: var(--tg-theme-bg-color);
+    background: #232E3C;
     padding: 30px 12px 15px;
     width: 100%;
     position: absolute;
     bottom: 0;
+    box-sizing: border-box;
 }
 
 .fade-enter-from,
@@ -458,7 +470,6 @@ export default {
 }
 
 .modal_form_label {
-    color: var(--tg-theme-subtitle-text-color);
     font-size: 12px;
     font-weight: 500;
     transition: all 0.2s ease;
@@ -476,7 +487,7 @@ export default {
     padding: 7px 0;
     color: white;
     font-weight: 500;
-    border-bottom: 1px solid var(--tg-theme-section-separator-color);
+    border-bottom: 1px solid #1a202c;
 }
 
 input:focus {
