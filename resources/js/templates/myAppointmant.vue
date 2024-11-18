@@ -1,95 +1,80 @@
 <template>
-    <div v-if="isLoading">
-        <Spinner></Spinner>
-    </div>
-    <div v-else>
-        <template v-if="hasEvents">
-            <div v-if="upcomingGroupedEvents.length" class="block_card block_card-none-bg bottom-20">
-                <h1 class="block_title">Актуальные записи</h1>
-                <div class="container_my_events flex">
-                    <div v-for="event in upcomingGroupedEvents" :key="event.date"
-                         class="block_card block_card-white flex flex_column blocks_my_events">
-                        <p class="date_my_events">{{ formatDateYMD(event.date) }}</p>
-
-                        <!-- Консультации -->
-                        <div v-if="event.slots.Consultation.length" class="flex row block_card_event">
-                            <div class="block_card_event_btns_times">
-                                <h4>Консультация:</h4>
-                            </div>
-                            <div class="btns_times flex row block_card_event_btns_times">
-                                <button v-for="time in event.slots.Consultation" :key="time"
-                                        class="btn_time selectedTimes">
-                                    {{ time }}
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Запись на прием -->
-                        <div v-if="event.slots['Appointment'].length" class="flex row block_card_event">
-                            <div class="block_card_event_btns_times">
-                                <h4>Запись на прием:</h4>
-                            </div>
-                            <div class="btns_times flex row block_card_event_btns_times">
-                                <button v-for="time in event.slots['Appointment']" :key="time"
-                                        class="btn_time selectedTimes">
-                                    {{ time }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Прошедшие записи -->
-            <div v-if="pastGroupedEvents.length" class="block_card block_card-none-bg">
-                <h1 class="block_title">Прошедшие записи</h1>
-                <div class="container_my_events flex">
-                    <div v-for="event in pastGroupedEvents" :key="event.date"
-                         class="block_card block_card-white flex flex_column blocks_my_events">
-                        <p class="date_my_events">{{ formatDateYMD(event.date) }}</p>
-
-                        <!-- Консультации -->
-                        <div v-if="event.slots.Consultation.length" class="flex row block_card_event">
-                            <div class="block_card_event_btns_times">
-                                <h4>Консультация:</h4>
-                            </div>
-                            <div class="btns_times flex row block_card_event_btns_times">
-                                <button v-for="time in event.slots.Consultation" :key="time"
-                                        class="btn_time selectedTimes">
-                                    {{ time }}
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Запись на прием -->
-                        <div v-if="event.slots['Appointment'].length" class="flex row block_card_event">
-                            <div class="block_card_event_btns_times">
-                                <h4>Запись на прием:</h4>
-                            </div>
-                            <div class="btns_times flex row block_card_event_btns_times">
-                                <button v-for="time in event.slots['Appointment']" :key="time"
-                                        class="btn_time selectedTimes">{{ time }}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </template>
-
-        <!-- Если нет записей -->
-        <div v-else class="non_events">
-            <img class="img img_info" :src="imagePath">
-            <p>У вас пока нет записей</p>
+    <div class="section_start_title">
+        <div v-if="isLoading">
+            <Spinner></Spinner>
         </div>
+        <template v-else>
+            <template v-if="hasEvents">
+
+                <div v-if="upcomingGroupedEvents.length">
+                    <h1 class="title_big margin_title ml_5">Мои записи</h1>
+
+                    <div class="flex column gap_5">
+                        <template v-for="(event, index) in upcomingGroupedEvents" :key="event.date">
+                            <template v-for="(time, idxTime) in event.slots">
+                                <div class="block_card">
+                                    <div class="two_block_card row flex flex-jc">
+                                        <div class="flex row center gap_10">
+                                            <h2 class="title_big ml_5">{{ event.day }}</h2>
+                                            <div>
+                                                <h4 class="title" style="margin-bottom: 4px">{{ event.month }}</h4>
+                                                <p v-if="time === '08:45'" class="text-grey">Консультация</p>
+                                                <p v-else class="text-grey">Прием</p>
+                                            </div>
+                                        </div>
+                                        <div :class="['block_card', { 'block_card-blue': idxTime === event.slots.length - 1 && index === upcomingGroupedEvents.length - 1, 'border_blue': idxTime !== event.slots.length - 1 ||  index !== upcomingGroupedEvents.length - 1}]" class="flex center" style="max-width: 130px">
+                                            <h2 class="title_big">{{time}}</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+
+                <!-- Прошедшие записи -->
+                <div class="section_mt container_rel" v-if="pastGroupedEvents.length">
+                    <h1 class="title_big margin_title ml_5">Прошедшие <br> записи</h1>
+                    <img class="img_fon img_check" :src="`/images/my-check.webp`">
+
+                    <div class="flex column gap_5">
+                        <template v-for="event in pastGroupedEvents" :key="event.date">
+                            <template v-for="(time, index) in event.slots">
+                                <div class="block_card">
+                                    <div class="two_block_card row flex flex-jc">
+                                        <div class="flex row center gap_10">
+                                            <h2 class="title_big ml_5">{{ event.day }}</h2>
+                                            <div>
+                                                <h4 class="title" style="margin-bottom: 4px">{{ event.month }}</h4>
+                                                <p v-if="time === '08:45'" class="text-grey">Консультация</p>
+                                                <p v-else class="text-grey">Прием</p>
+                                            </div>
+                                        </div>
+                                        <div class="block_card flex center" style="max-width: 130px">
+                                            <h2 class="title_big">{{ time }}</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+
+            </template>
+
+            <!-- Если нет записей -->
+            <div v-else class="flex center column non_events">
+                <img class="img" style="width: 150px;" :src="`/images/my-ev.webp`">
+                <p class="little_text">У вас пока нет записей</p>
+            </div>
+        </template>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
 import Spinner from "./components/spinner.vue";
-import {formatDateYMD} from "../convert-data.js";
+import {groupEvents} from "../convert-data.js";
 
 export default {
     name: 'MyEvents',
@@ -99,15 +84,14 @@ export default {
             upcomingEvents: [],
             pastEvents: [],
             isLoading: true,
-            imagePath: '/images/my-events.png'
         };
     },
     computed: {
         upcomingGroupedEvents() {
-            return this.upcomingEvents ? this.groupEvents(this.upcomingEvents) : [];
+            return this.upcomingEvents ? groupEvents(this.upcomingEvents) : [];
         },
         pastGroupedEvents() {
-            return this.pastEvents ? this.groupEvents(this.pastEvents) : [];
+            return this.pastEvents ? groupEvents(this.pastEvents) : [];
         },
         hasEvents() {
             return this.upcomingGroupedEvents.length || this.pastGroupedEvents.length;
@@ -127,7 +111,6 @@ export default {
         this.loadEvents(userId);
     },
     methods: {
-        formatDateYMD,
         async loadEvents(userId) {
             try {
                 const response = await axios.post('/api/get-events', {id_user: userId});
@@ -143,82 +126,22 @@ export default {
                 this.isLoading = false;
             }
         },
-        groupEvents(events) {
-            if (!Array.isArray(events)) {
-                console.error("Expected an array of events, but got:", events);
-                return [];
-            }
-            const grouped = {};
-
-            events.forEach(event => {
-                const [date, time] = event.start.split(' ');
-                const type = time === '08:45' ? "Consultation" : "Appointment";
-
-                if (!grouped[date]) {
-                    grouped[date] = {
-                        date,
-                        slots: {Consultation: [], Appointment: []}
-                    };
-                }
-                grouped[date].slots[type].push(time);
-            });
-
-            return Object.values(grouped);
-        }
     }
 }
 </script>
 
 <style scoped>
-
-.img_info {
-    width: 150px;
-}
-.bottom-20 {
-    margin-bottom: 20px;
-}
-.blocks_my_events {
-    gap: 10px;
+.img_check {
+    top: -20px;
+    right: 10px;
+    width: 130px;
+    transform: rotate(-15deg);
 }
 
-.block_card_event:not(:last-child) {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #BBBBBB;
-}
-
-.block_card_event_btns_times {
-    width: 50%;
-}
-
-.date_my_events {
-    color: #575757;
-    font-size: 13px;
-}
-
-.container_my_events {
-    gap: 10px;
-    min-height: 100px;
-}
-
-.non_events{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.non_events {
     position: absolute;
-    top: 50%;
     left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
-}
-
-.non_events p {
-    color: rgba(208, 208, 210, 0.44);
-    font-size: 16px;
-    font-weight: 500;
-}
-
-.block_card-none-bg {
-    background: none;
 }
 </style>

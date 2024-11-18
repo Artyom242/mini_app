@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/get-events', [EventsController::class, 'getEvents']);
 Route::post('/check-events', [CheckEventsController::class, 'checkEvents']);
 Route::post('/message', [MessageController::class, 'sendMessage']);
-Route::post('/telegram/callback-query', [TelegramController::class, 'handleCallbackQuery']);
+Route::post('/telegram/callback-query', [TelegramController::class, 'handleWebhook']);
 
 Route::post('/initialize-cache', [CalendarServiceController::class, 'initializeCache']);
 

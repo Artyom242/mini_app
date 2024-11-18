@@ -2,10 +2,10 @@
     <div class="calendar_block">
         <table id="calendar">
             <thead>
-            <tr class="row_title_calendar ">
-                <td class="arrow" @click="prevMonth">‹</td>
-                <td colspan="5" class="title_calendar block_title">{{ monthName }}</td>
-                <td class="arrow" @click="nextMonth">›</td>
+            <tr class="row_title_calendar">
+                <td class="arrow" style="transform: rotateY(180deg)" @click="prevMonth"><svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" width="24"><polyline points="9 18 15 12 9 6"/></svg></td>
+                <td colspan="5" class="title_calendar title">{{ monthName }}</td>
+                <td class="arrow" @click="nextMonth"><svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewBox="0 0 24 24" width="24"><polyline points="9 18 15 12 9 6"/></svg></td>
             </tr>
             <tr class="row_deys_calendar">
                 <td>Пн</td>
@@ -35,7 +35,6 @@
 </template>
 <script>
 import {ref, computed} from 'vue';
-import axios from "axios";
 import {formatDate} from "../../convert-data.js"
 import {getAvailableTimeSlots} from "../../getEventsCalendar.js"
 
@@ -111,13 +110,28 @@ export default {
                     emit('timeData', []);
                 } else {
                     selectedDate.value = {day, month: month.value + 1, year: year.value};
-                    const formattedDate = formatDate(selectedDate.value);
 
+                    const formattedDate = formatDate(selectedDate.value);
                     let events = getAvailableTimeSlots(formattedDate);
                     emit('dateSelected', selectedDate.value);
                     emit('timeData', events);
                 }
             }
+        };
+        const updateCalendarWithNearestSlot = (date) => {
+            const day = new Date(date).getDate();
+            const newMonth = new Date(date).getMonth();
+            const newYear = new Date(date).getFullYear();
+
+            year.value = newYear;
+            month.value = newMonth;
+            selectedDate.value = { day, month: newMonth + 1, year: newYear };
+
+            const formattedDate = formatDate(selectedDate.value);
+            let events = getAvailableTimeSlots(formattedDate);
+
+            emit('dateSelected', selectedDate.value);
+            emit('timeData', events);
         };
 
         const isPastDate = (day) => {
@@ -138,9 +152,10 @@ export default {
             isWeekend,
             isSelected,
             isPastDate,
-
+            updateCalendarWithNearestSlot,
         };
     },
+
 };
 </script>
 

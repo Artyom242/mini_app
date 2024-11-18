@@ -1,26 +1,92 @@
 <template>
     <!--Блоки Цена/Отзывы/Мои записи-->
-    <div class="flex row gap_10">
-        <div class="flex blocks container_cards">
-            <router-link class="block_card" to="/prices"><h1 class="block_title">Цены</h1></router-link>
-            <router-link class="block_card" to="/reviews"><h1 class="block_title">Отзывы</h1></router-link>
-        </div>
-        <div class="flex blocks container_cards">
-            <router-link class="block_card block_card__blue flex container_cards" to="/my-records">
-                <h1 class="block_title">Мои<br>Записи</h1>
-                <div class="arrow_card flex center"><span>›</span></div>
+    <div class="flex row mb_10 gap_10 container_rel">
+        <div class="gradient_block"></div>
+        <div class="flex column container_blocks">
+            <router-link class="block_card" to="/prices">
+                <div class="flex row container_rel flex-jc">
+                    <h2 class="title mb_5">Цены</h2>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                         stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+                <p class="little_text">Актуальные цены на услуги</p>
+
+            </router-link>
+            <router-link class="block_card" to="/reviews">
+                <div class="flex row container_rel flex-jc">
+                    <h2 class="title mb_5">Отзывы</h2>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                         stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+                <p class="little_text">Что думают о нас наши
+                    клиенты</p>
             </router-link>
         </div>
-    </div>
-    <div class="container_calendar flex">
 
-        <Calendar @timeData="handleTimeData"
+        <router-link class="block_card container_blocks block_card-blue flex-jc flex" to="/my-records">
+            <h2 class="margin_title title">Мои<br>Записи</h2>
+            <div class="arrow_card flex center">
+                <svg width="18" height="18" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M16.7071 8.70711C17.0976 8.31658 17.0976 7.68342 16.7071 7.29289L10.3431 0.928932C9.95262 0.538408 9.31946 0.538408 8.92893 0.928932C8.53841 1.31946 8.53841 1.95262 8.92893 2.34315L14.5858 8L8.92893 13.6569C8.53841 14.0474 8.53841 14.6805 8.92893 15.0711C9.31946 15.4616 9.95262 15.4616 10.3431 15.0711L16.7071 8.70711ZM0 9H16V7H0V9Z"
+                        fill="#1D7BF6"/>
+                </svg>
+            </div>
+        </router-link>
+    </div>
+
+    <div class="section_mt container_rel">
+        <h2 class="title_big margin_title ml_5">Ближайшие <br> свободные записи</h2>
+        <img class="img_fon img_calendar" :src="`/images/home-calendar.webp`">
+
+        <div class="flex column gap_10 mb_10">
+            <button v-if="freeConsultation" class="block_card btn_next_app"
+                    @click="handleNearestSlot('consultation')">
+                <div class="two_block_card row flex flex-jc">
+                    <div class="flex row center gap_10">
+                        <h2 class="title_big ml_5">{{ formatDay(freeConsultation.date) }}</h2>
+                        <div class="flex column">
+                            <h4 class="title">{{ formatMonth(freeReception.date) }}</h4>
+                            <p class="text-grey text-14">Консультация в {{ freeConsultation.time }}</p>
+                        </div>
+                    </div>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                         stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </button>
+            <button v-if="freeReception" class="block_card btn_next_app"
+                    @click="handleNearestSlot('reception')">
+                <div class="two_block_card row flex flex-jc">
+                    <div class="flex row center gap_10">
+                        <h2 class="title_big ml_5">{{ formatDay(freeReception.date) }}</h2>
+                        <div class="flex column">
+                            <h4 class="title">{{ formatMonth(freeReception.date) }}</h4>
+                            <p class="text-grey text-14">Прием в {{ freeReception.time }}</p>
+                        </div>
+                    </div>
+                    <svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                         stroke-width="3" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                </div>
+            </button>
+        </div>
+    </div>
+    <div class="block_card flex gap_10">
+        <Calendar ref="calendarRef"
+                  @timeData="handleTimeData"
                   @dateSelected="handleDateSelection"
         ></Calendar>
-
         <transition name="expand" mode="out-in">
-            <div v-if="!selectedDate" class="flex column block_time">
-                <h4 class="little_title">Выберите дату</h4>
+            <div v-if="!selectedDate">
+                <h4 class="block_card_price--title title">Выберите дату</h4>
+                <div class="blue_line"></div>
             </div>
 
             <div v-else class="flex column block_time">
@@ -37,7 +103,7 @@
                         </div>
                     </template>
                     <div v-else>
-                        <h4 class="title_close little_title">Все время для приема занято</h4>
+                        <h4 class="text_busy">Все время для приема занято</h4>
                     </div>
                 </div>
                 <div v-if="availableSlots.consultation['08:45']">
@@ -49,7 +115,7 @@
                     </div>
                 </div>
                 <div v-else>
-                    <h4 class="title_close little_title">Консультация занята</h4>
+                    <h4 class="text_busy">Консультация занята</h4>
                 </div>
             </div>
         </transition>
@@ -58,10 +124,12 @@
     <transition name="fade">
         <div v-if="isModalOpen" class="modal-overlay" @click="closeModal">
             <div class="modal" @click.stop>
-                <h5 class="title modal_form-title">Осталось совсем немного</h5>
+                <h2 class="title modal_form-title">Осталось совсем немного</h2>
                 <div class="modal_form flex column">
+                    <img class="img_fon img_zap" :src="`/images/home-zap.webp`">
+
                     <div class="flex column modal_form_pole">
-                        <label ref="nameLabel" class="modal_form_label" :class="{ 'active': !name && !isNameFocused }"
+                        <label ref="nameLabel" class="text-grey modal_form_label" :class="{ 'active': !name && !isNameFocused }"
                                for="name">Имя</label>
                         <input class="input" type="text" v-model="name"
                                @input="updateMainButton"
@@ -69,7 +137,7 @@
                                @blur="onBlur('name')"/>
                     </div>
                     <div class="flex column modal_form_pole">
-                        <label ref="phoneLabel" class="modal_form_label"
+                        <label ref="phoneLabel" class="text-grey modal_form_label"
                                :class="{ 'active': !phone && !isPhoneFocused }" for="phone">Телефон</label>
                         <MaskInput class="input" mask="+7 (###) ### ##-##" type="tel" v-model="phone"
                                    @input="updateMainButton"
@@ -83,8 +151,9 @@
 </template>
 <script>
 import Calendar from './components/calendar.vue';
-import {formatDate} from "../convert-data.js"
+import {formatDate, groupEvents} from "../convert-data.js"
 import {MaskInput} from 'vue-3-mask';
+import {findNearestAvailableSlots} from "../findNearestAvailableSlots.js";
 
 export default {
     name: 'Home',
@@ -107,21 +176,24 @@ export default {
             isNameFocused: false,
             isPhoneFocused: false,
             isFirstHandlerActive: true,
+            freeConsultation: null,
+            freeReception: null,
         };
     },
     computed: {
         hasAvailableReceptionSlots() {
             return Object.values(this.availableSlots.reception).some(available => available);
-        }
+        },
     },
     mounted() {
         let tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
-
         this.initializeCache();
         this.updateMainButton();
+        this.findNearestAvailableSlot();
     },
+
     watch: {
         selectedTimes() {
             this.updateMainButton();
@@ -134,6 +206,21 @@ export default {
         }
     },
     methods: {
+        async handleNearestSlot(slotType) {
+            let slotData;
+
+            if (slotType === 'consultation') {
+                slotData = this.freeConsultation;
+            } else if (slotType === 'reception') {
+                slotData = this.freeReception;
+            }
+
+            if (!slotData) return;
+            const {date, time} = slotData;
+            this.$refs.calendarRef.updateCalendarWithNearestSlot(date);
+            this.selectedTimes = [];
+            this.selectedTimes = [...this.selectedTimes, time];
+        },
         async initializeCache() {
             try {
                 let response = await axios.post('api/initialize-cache');
@@ -182,6 +269,31 @@ export default {
                 tg.showAlert("Произошла ошибка. Попробуйте позже.");
             }
         },
+        async findNearestAvailableSlot() {
+            const nearestSlots = await findNearestAvailableSlots();
+
+            this.freeConsultation = nearestSlots.consultation;
+            this.freeReception = nearestSlots.reception;
+        },
+
+        scrollToBottom() {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth',
+            });
+        },
+        formatDay(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.getDate();
+        },
+        formatMonth(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            const month = date.toLocaleString('ru-RU', {month: 'long'});
+            return month.charAt(0).toUpperCase() + month.slice(1);
+        },
+
         handleTimeData(response) {
             this.availableSlots.consultation = response.consultation || {};
             this.availableSlots.reception = response.reception || {};
@@ -194,7 +306,10 @@ export default {
         },
         handleDateSelection(date) {
             this.selectedDate = date;
-            },
+            setTimeout(()=>{
+                this.scrollToBottom();
+            },300);
+        },
         toggleTime(time) {
             const index = this.selectedTimes.indexOf(time);
             if (index > -1) {
@@ -275,6 +390,34 @@ export default {
 </script>
 
 <style>
+.text-14 {
+    font-size: 14px;
+}
+
+.text-20 {
+    font-size: 16px;
+}
+
+.img_calendar {
+    width: 140px;
+    top: -40px;
+    right: -15px;
+    transform: rotate(-30deg);
+}
+
+.img_zap{
+    width: 150px;
+    top: -40px;
+    right: -15px;
+    pointer-events: none;
+    user-select: none;
+    transform: rotate(15deg);
+}
+
+.text_busy {
+    margin-bottom: 0;
+    color: #A5A5A5;
+}
 
 .modal-overlay {
     position: fixed;
@@ -289,11 +432,12 @@ export default {
 }
 
 .modal {
-    background: var(--tg-theme-bg-color);
+    background: #232E3C;
     padding: 30px 12px 15px;
     width: 100%;
     position: absolute;
     bottom: 0;
+    box-sizing: border-box;
 }
 
 .fade-enter-from,
@@ -316,24 +460,16 @@ export default {
     transform: translateY(0);
 }
 
-.title_close {
-    margin-bottom: 0;
-    color: #555;
-}
-
 .modal_form_pole {
     padding: 5px 0;
 }
 
 .modal_form-title {
-    color: white;
-    font-weight: 700;
     text-align: left;
     margin-bottom: 20px;
 }
 
 .modal_form_label {
-    color: var(--tg-theme-subtitle-text-color);
     font-size: 12px;
     font-weight: 500;
     transition: all 0.2s ease;
@@ -351,7 +487,7 @@ export default {
     padding: 7px 0;
     color: white;
     font-weight: 500;
-    border-bottom: 1px solid var(--tg-theme-section-separator-color);
+    border-bottom: 1px solid #1a202c;
 }
 
 input:focus {

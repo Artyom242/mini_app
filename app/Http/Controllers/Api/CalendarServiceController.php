@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Spatie\GoogleCalendar\Event;
-use Carbon\Carbon;
 
 class CalendarServiceController extends Controller
 {
@@ -28,13 +25,5 @@ class CalendarServiceController extends Controller
         }
 
         return response()->json($eventsByDate);
-    }
-
-    public function getEventsForDate($date)
-    {
-        return Cache::remember("calendar_events_{$date}", now()->addDay(), function () use ($date) {
-            $events = Event::get(Carbon::parse($date)->startOfDay(), Carbon::parse($date)->endOfDay());
-            return $events;
-        });
     }
 }

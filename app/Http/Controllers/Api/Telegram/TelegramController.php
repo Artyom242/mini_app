@@ -18,12 +18,58 @@ class TelegramController extends Controller
 
     public function __construct()
     {
-        $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+        $this->telegram = new Api("5771654442:AAEsqtfqlrLPVaW7RG8nxVcDHg6uz9LVfAI");
+//        $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
     }
 
-    public function handleCallbackQuery(Request $request)
+    public function handleWebhook(Request $request)
     {
+        $message = $request->input('message');
         $callbackQuery = $request->input('callback_query');
+
+        if (isset($message['text']) && $message['text'] === '/start') {
+            $chatId = $message['chat']['id'];
+            $username = $message['chat']['username'] ?? 'не указан';
+            $phoneNumber = $message['contact']['phone_number'] ?? 'не указан';
+
+            $userData = "ID: {$chatId}, Username: {$username}, Phone: {$phoneNumber}" . PHP_EOL;
+            file_put_contents(storage_path('logs/user_data.log'), $userData, FILE_APPEND);
+
+            $this->handleStart($message['chat']['id']);
+            return;
+        }
+
+        if ($callbackQuery) {
+            $this->handleCallbackQuery($callbackQuery);
+        }
+    }
+
+    public function handleStart($chatId)
+    {
+        $text = "Добро пожаловать! Нажмите на кнопку 'Открыть' в самом низу или под этим сообщением, чтобы запустить Mini App.";
+
+        $keyboard = [
+            'inline_keyboard' => [
+                [
+                    [
+                        'text' => 'Открыть',
+                        'web_app' => [
+                            'url' => 'https://6d4e-188-162-6-104.ngrok-free.app'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->telegram->sendMessage([
+            'chat_id' => $chatId,
+            'text' => $text,
+            'reply_markup' => json_encode($keyboard)
+        ]);
+    }
+
+    public function handleCallbackQuery(array  $callbackQuery)
+    {
 
         if ($callbackQuery) {
             $userId = $callbackQuery['from']['id'];
@@ -34,6 +80,10 @@ class TelegramController extends Controller
             $appointmentData = Cache::get("appointment_{$appointmentId}");
             Log::info("AppointmentData:", ["Appoin" => $appointmentData]);
 
+            if (!$appointmentData) {
+                Log::error("Данные записи не найдены в кэше.");
+                return;
+            }
 
             if ($action === 'confirm_appointment') {
                 $this->createEvent($appointmentData);
@@ -63,7 +113,7 @@ class TelegramController extends Controller
                 ]);
             }
 
-            Cache::forget("appointment_{$appointmentId}}");
+            Cache::forget("appointment_{$appointmentId}");
             $te = Cache::get("appointment_{$appointmentId}");
             Log::info("Cash", ["cash" => $te]);
         }

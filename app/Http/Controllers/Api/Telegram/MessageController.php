@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Telegram\Bot\Api;
@@ -32,7 +31,8 @@ class MessageController extends Controller
         Log::info("Cached Appointment Data", ['data' => Cache::get("appointment_{$appointmentId}")]);
 
         try {
-            $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+            $telegram = new Api("5771654442:AAEsqtfqlrLPVaW7RG8nxVcDHg6uz9LVfAI");
+//            $telegram = new Api("5771654442:AAEsqtfqlrLPVaW7RG8nxVcDHg6uz9LVfAI");
 
             $keyboard = [
                 'inline_keyboard' => [

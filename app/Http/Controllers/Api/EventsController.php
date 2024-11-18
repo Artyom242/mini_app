@@ -34,16 +34,10 @@ class EventsController extends Controller
 
         $result = [
             'past_events' => $pastEvents->map(fn($event) => [
-                'id' => $event->id,
-                'title' => $event->name,
-                'description' => $event->description,
                 'start' => $event->startDateTime->format('Y-m-d H:i'),
                 'end' => $event->endDateTime->format('Y-m-d H:i'),
             ]),
             'upcoming_events' => $upcomingEvents->map(fn($event) => [
-                'id' => $event->id,
-                'title' => $event->name,
-                'description' => $event->description,
                 'start' => $event->startDateTime->format('Y-m-d H:i'),
                 'end' => $event->endDateTime->format('Y-m-d H:i'),
             ])
