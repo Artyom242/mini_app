@@ -22,7 +22,7 @@
                                                 <p v-else class="text-grey">Прием</p>
                                             </div>
                                         </div>
-                                        <div :class="['block_card', { 'block_card-blue': idxTime === event.slots.length - 1 && index === upcomingGroupedEvents.length - 1, 'border_blue': index !== event.slots.length}]" class="flex center" style="max-width: 130px">
+                                        <div :class="['block_card', { 'block_card-blue': idxTime === event.slots.length - 1 && index === upcomingGroupedEvents.length - 1, 'border_blue': idxTime !== event.slots.length - 1 ||  index !== upcomingGroupedEvents.length - 1}]" class="flex center" style="max-width: 130px">
                                             <h2 class="title_big">{{time}}</h2>
                                         </div>
                                     </div>
