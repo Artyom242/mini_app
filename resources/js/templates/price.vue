@@ -23,7 +23,7 @@
                         <div class="blue_line"></div>
                     </div>
                     <div class="mb_20 flex_full_height">
-                        <p class="little_text">Рекомендуется каждые пол года проходить осмотр</p>
+                        <p class="little_text">Обеспечивает комфорт и отсутствие боли при процедурах</p>
                     </div>
                     <div class="block_price">
                         <div class="flex column" style="text-align: end">
@@ -40,11 +40,11 @@
             <h2 class="title_big margin_title ml_5">Терапия</h2>
             <div class="block_card flex container_rel mb_10">
                 <div class="mb_10">
-                    <h4 class="block_card_price--title title">Консультация врача</h4>
+                    <h4 class="block_card_price--title title">Лечение кариеса</h4>
                     <div class="blue_line"></div>
                 </div>
                 <div class="mb_20">
-                    <p class="little_text">Рекомендуется каждые пол года проходить осмотр</p>
+                    <p class="little_text">Начальная стадия кариеса может быть вылечена без сверления</p>
                 </div>
                 <div class="flex gap_10">
                     <div class="block_card flex gap_30 row flex-center-text border_blue">
@@ -79,7 +79,7 @@
                         <div class="blue_line"></div>
                     </div>
                     <div class="mb_20">
-                        <p class="little_text">Рекомендуется каждые пол года проходить осмотр</p>
+                        <p class="little_text">Здоровые десны — залог крепких зубов</p>
                     </div>
                     <div class="block_price">
                         <div class="flex column" style="text-align: end">
@@ -93,7 +93,7 @@
                         <div class="blue_line"></div>
                     </div>
                     <div class="mb_20 flex_full_height">
-                        <p class="little_text">Фотополимерным материал поможет вам, и нам</p>
+                        <p class="little_text">Современные материалы делают реставрацию почти незаметной</p>
                     </div>
                     <div class="block_price">
                         <div class="flex column" style="text-align: end">
@@ -109,7 +109,7 @@
                     <div class="blue_line"></div>
                 </div>
                 <div class="mb_20">
-                    <p class="little_text">Рекомендуется каждые пол года проходить осмотр</p>
+                    <p class="little_text">Основная причина пульпита — осложненный кариес</p>
                 </div>
                 <div class="flex gap_10">
                     <div class="block_card flex gap_30 row flex-center-text border_blue">
@@ -147,7 +147,7 @@
                         <div class="blue_line"></div>
                     </div>
                     <div class="mb_20">
-                        <p class="little_text">Рекомендуется каждые пол года проходить осмотр</p>
+                        <p class="little_text">Коронки из циркония могут служить до 20 лет</p>
                     </div>
                     <div class="block_price">
                         <div class="flex column" style="text-align: end">
@@ -157,15 +157,15 @@
                 </div>
                 <div class="block_card flex">
                     <div class="mb_10">
-                        <h4 class="block_card_price--title title">Фиксация коронки</h4>
+                        <h4 class="block_card_price--title title">Вкладка ортопедическая</h4>
                         <div class="blue_line"></div>
                     </div>
                     <div class="mb_20 flex_full_height">
-                        <p class="little_text"></p>
+                        <p class="little_text">Вкладка восстанавливает форму и функцию зуба, избегая коронки</p>
                     </div>
                     <div class="block_price">
                         <div class="flex column" style="text-align: end">
-                            <p class="title_big">500</p>
+                            <p class="title_big">5000</p>
                         </div>
                     </div>
                 </div>
@@ -176,7 +176,7 @@
                     <div class="blue_line"></div>
                 </div>
                 <div class="mb_20">
-                    <p class="little_text">У нас лучшие коронки в городе!</p>
+                    <p class="little_text">Процесс установки коронки занимает два визита к стоматологу</p>
                 </div>
                 <div class="flex gap_10">
                     <div class="block_card flex gap_30 row flex-center-text border_blue">
@@ -214,7 +214,7 @@
                         <div class="blue_line"></div>
                     </div>
                     <div class="mb_20">
-                        <p class="little_text">Рекомендуется каждые пол года проходить осмотр</p>
+                        <p class="little_text">Ультразвуковые волны расщепляют даже самые стойкие загрязнения</p>
                     </div>
                     <div class="block_price">
                         <div class="flex column" style="text-align: end">
@@ -228,7 +228,7 @@
                         <div class="blue_line"></div>
                     </div>
                     <div class="mb_20 flex_full_height">
-                        <p class="little_text">Аппарат Air Flow</p>
+                        <p class="little_text">Удаляет мягкий налет и пигментацию с поверхности зубов</p>
                     </div>
                     <div class="block_price">
                         <div class="flex column" style="text-align: end">

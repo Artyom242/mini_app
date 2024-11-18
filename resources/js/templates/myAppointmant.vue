@@ -11,18 +11,18 @@
 
                     <div class="flex column gap_5">
                         <template v-for="(event, index) in upcomingGroupedEvents" :key="event.date">
-                            <template v-for="(time) in event.slots">
+                            <template v-for="(time, idxTime) in event.slots">
                                 <div class="block_card">
                                     <div class="two_block_card row flex flex-jc">
                                         <div class="flex row center gap_10">
                                             <h2 class="title_big ml_5">{{ event.day }}</h2>
                                             <div>
                                                 <h4 class="title" style="margin-bottom: 4px">{{ event.month }}</h4>
-                                                <p v-if="time === '8:45'" class="text-grey">Консультация</p>
+                                                <p v-if="time === '08:45'" class="text-grey">Консультация</p>
                                                 <p v-else class="text-grey">Прием</p>
                                             </div>
                                         </div>
-                                        <div :class="['block_card', { 'block_card-blue': index === upcomingGroupedEvents.length - 1, 'border_blue': index !== upcomingGroupedEvents.length - 1}]" class="flex center" style="max-width: 130px">
+                                        <div :class="['block_card', { 'block_card-blue': idxTime === event.slots.length - 1 && index === upcomingGroupedEvents.length - 1, 'border_blue': index !== event.slots.length}]" class="flex center" style="max-width: 130px">
                                             <h2 class="title_big">{{time}}</h2>
                                         </div>
                                     </div>
@@ -46,7 +46,7 @@
                                             <h2 class="title_big ml_5">{{ event.day }}</h2>
                                             <div>
                                                 <h4 class="title" style="margin-bottom: 4px">{{ event.month }}</h4>
-                                                <p v-if="time === '8:45'" class="text-grey">Консультация</p>
+                                                <p v-if="time === '08:45'" class="text-grey">Консультация</p>
                                                 <p v-else class="text-grey">Прием</p>
                                             </div>
                                         </div>
@@ -74,7 +74,7 @@
 <script>
 import axios from 'axios';
 import Spinner from "./components/spinner.vue";
-import {groupEvents} from "@/convert-data.js";
+import {groupEvents} from "../convert-data.js";
 
 export default {
     name: 'MyEvents',
