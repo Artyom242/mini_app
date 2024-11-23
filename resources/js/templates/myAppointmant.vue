@@ -33,7 +33,7 @@
                 </div>
 
                 <!-- Прошедшие записи -->
-                <div class="section_mt container_rel" v-if="pastGroupedEvents.length">
+                <div :class="{'section_mt': upcomingGroupedEvents.length}" class="container_rel" v-if="pastGroupedEvents.length">
                     <h1 class="title_big margin_title ml_5">Прошедшие <br> записи</h1>
                     <img class="img_fon img_check" :src="`/images/my-check.webp`">
 

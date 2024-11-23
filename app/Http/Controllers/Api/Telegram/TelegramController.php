@@ -18,8 +18,7 @@ class TelegramController extends Controller
 
     public function __construct()
     {
-        $this->telegram = new Api("5771654442:AAEsqtfqlrLPVaW7RG8nxVcDHg6uz9LVfAI");
-//        $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+        $this->telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
     }
 
     public function handleWebhook(Request $request)
@@ -46,7 +45,7 @@ class TelegramController extends Controller
 
     public function handleStart($chatId)
     {
-        $text = "Добро пожаловать! Нажмите на кнопку 'Открыть' в самом низу или под этим сообщением, чтобы запустить Mini App.";
+        $text = "Нажмите на кнопку 'Открыть' в самом низу или под этим сообщением, чтобы запустить Mini App.";
 
         $keyboard = [
             'inline_keyboard' => [

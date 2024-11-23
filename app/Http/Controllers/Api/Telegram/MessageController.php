@@ -12,13 +12,14 @@ use Telegram\Bot\Api;
 
 class MessageController extends Controller
 {
-    public function sendMessage(Request $request){
+    public function sendMessage(Request $request)
+    {
         $chatId = $request->input('chat_id');
         $date = $request->input('date');
         $formattedDate = Carbon::parse($date)->format('d.m.Y');
         $times = $request->input('times');
         $timesForMessage = implode(', ', $times);
-            $messageText = "{$formattedDate} Вы записаны на прием к {$timesForMessage}.";
+        $messageText = "{$formattedDate} Вы записаны на прием к {$timesForMessage}.";
 
         $appointmentId = Str::uuid()->toString();
         Cache::put("appointment_{$appointmentId}", [
@@ -31,8 +32,7 @@ class MessageController extends Controller
         Log::info("Cached Appointment Data", ['data' => Cache::get("appointment_{$appointmentId}")]);
 
         try {
-            $telegram = new Api("5771654442:AAEsqtfqlrLPVaW7RG8nxVcDHg6uz9LVfAI");
-//            $telegram = new Api("5771654442:AAEsqtfqlrLPVaW7RG8nxVcDHg6uz9LVfAI");
+            $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
 
             $keyboard = [
                 'inline_keyboard' => [
